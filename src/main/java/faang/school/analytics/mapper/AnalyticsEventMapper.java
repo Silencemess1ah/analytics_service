@@ -2,8 +2,6 @@ package faang.school.analytics.mapper;
 
 import faang.school.analytics.dto.MentorshipRequestReceivedDto;
 import faang.school.analytics.dto.PostViewEventDto;
-import faang.school.analytics.dto.user.ProfileViewEventDto;
-import faang.school.analytics.dto.PostViewEventDto;
 import faang.school.analytics.dto.analyticsEvent.AnalyticsEventDto;
 import faang.school.analytics.dto.user.ProfileViewEventDto;
 import faang.school.analytics.model.AnalyticsEvent;
