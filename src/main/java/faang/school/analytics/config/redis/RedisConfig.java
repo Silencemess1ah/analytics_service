@@ -1,5 +1,10 @@
 package faang.school.analytics.config.redis;
 
+import faang.school.analytics.listener.FollowerEventListener;
+import faang.school.analytics.listener.GoalEventListener;
+import faang.school.analytics.listener.PostLikeEventListener;
+import faang.school.analytics.listener.PostViewEventListener;
+import faang.school.analytics.listener.ProfileViewEventListener;
 import faang.school.analytics.config.redis.eventconfig.EventRedisConfig;
 import faang.school.analytics.config.redis.eventconfig.PremiumBoughtEventRedisConfig;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +50,9 @@ public class RedisConfig {
         return new ChannelTopic(postLikeChannelName);
     }
 
+    @Bean(value = "postViewChannel")
+    public ChannelTopic postViewChannel(
+            @Value("${spring.data.redis.channels.post-view-channel.name}") String postViewChannelName) {
+        return new ChannelTopic(postViewChannelName);
+    }
 }
