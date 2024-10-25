@@ -31,9 +31,10 @@ spring:
             name: post_like_event_channel
           post_view_event_channel:
             name: post_view
-        channel:
-          profile-view: profile_view_channel
-          comment_event: comment_event_channel
+
+      channel:
+        profile-view: profile_view_channel
+        comment-event: comment_event_channel
 
 server:
   port: 8086

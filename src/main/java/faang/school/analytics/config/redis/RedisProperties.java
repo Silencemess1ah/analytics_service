@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 public class RedisProperties {
+
     @Value("${spring.data.redis.port}")
     private int port;
 
@@ -24,7 +25,4 @@ public class RedisProperties {
 
     @Value("${spring.data.redis.channels.post-service.post-like-channel.name}")
     private String postLikeEventChannelName;
-
-    @Value("${spring.data.redis.channel.comment-event}")
-    private String commentEventTopicName;
 }
