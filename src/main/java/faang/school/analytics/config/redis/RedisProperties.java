@@ -15,4 +15,16 @@ public class RedisProperties {
 
     @Value("${spring.data.redis.channels.post-service.post_view_event_channel.name}")
     private String postViewChannelName;
+
+    @Value("${spring.data.redis.channels.post-service.user-ban-channel.name}")
+    private String userBanChannelName;
+
+    @Value("${spring.data.redis.channels.post-service.comment-channel.name}")
+    private String commentEventChannelName;
+
+    @Value("${spring.data.redis.channels.post-service.post-like-channel.name}")
+    private String postLikeEventChannelName;
+
+    @Value("${spring.data.redis.channel.comment-event}")
+    private String commentEventTopicName;
 }
