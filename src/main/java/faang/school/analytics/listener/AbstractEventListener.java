@@ -23,7 +23,6 @@ public abstract class AbstractEventListener<T> implements MessageListener {
 
     protected void handleEvent(Message message, Class<T> type, Consumer<T> consumer) {
         try {
-            log.info("Received message: {}", new String(message.getBody()));
             T event = objectMapper.readValue(message.getBody(), type);
             log.info("Successfully deserialized message to {}: {}", type.getSimpleName(), event);
             consumer.accept(event);
