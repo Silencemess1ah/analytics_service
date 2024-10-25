@@ -28,6 +28,7 @@ spring:
         like: like_channel
         ad-bought: ad_bought_channel
         fund-raised: fund_raised_channel
+        follower_event: follower_event_channel
 
 server:
   port: 8086
@@ -39,14 +40,3 @@ logging:
 project-service:
   host: localhost
   port: 8082
-
-redis:
-  port: 6379
-  host: localhost
-  channel:
-    profile-view: profile_view_channel
-    search-appearance: search_appearance_channel
-    recommendation: recommendation_channel
-    like: like_post
-    ad-bought: ad_bought
-    goal-completed: goal_completed_channel

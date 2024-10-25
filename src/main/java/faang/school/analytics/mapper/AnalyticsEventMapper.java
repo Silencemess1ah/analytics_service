@@ -6,6 +6,7 @@ import faang.school.analytics.model.dto.FundRaisedEvent;
 import faang.school.analytics.model.dto.ProfileViewEvent;
 import faang.school.analytics.model.dto.SearchAppearanceEvent;
 import faang.school.analytics.model.entity.AnalyticsEvent;
+import faang.school.analytics.model.event.FollowerEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -25,4 +26,10 @@ public interface AnalyticsEventMapper {
 
     @Mapping(source = "projectId", target = "receiverId")
     AnalyticsEvent fromFundRaisedToEntity(FundRaisedEvent fundRaisedEvent);
+
+    @Mapping(source = "followerId", target = "actorId")
+    @Mapping(source = "followedUserId", target = "receiverId")
+    @Mapping(source = "eventType", target = "eventType")
+    @Mapping(source = "followedAt", target = "receivedAt")
+    AnalyticsEvent fromFollowerEventToEntity(FollowerEvent followerEvent);
 }

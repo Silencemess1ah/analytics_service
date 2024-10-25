@@ -43,6 +43,9 @@ public class RedisConfig {
     @Value("${spring.data.redis.channel.fund-raised}")
     private String fundRaisedChannel;
 
+    @Value("${spring.data.redis.channel.follower_event}")
+    private String followerEventChannel;
+
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory);
@@ -109,6 +112,11 @@ public class RedisConfig {
     @Bean
     ChannelTopic fundRaisedTopic() {
         return new ChannelTopic(fundRaisedChannel);
+    }
+
+    @Bean
+    public ChannelTopic followerEventChannelTopic() {
+        return new ChannelTopic(followerEventChannel);
     }
 
     @Bean

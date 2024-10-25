@@ -27,4 +27,3 @@ public abstract class AbstractRedisListener<T> implements MessageListener {
         }
     }
 }
-
