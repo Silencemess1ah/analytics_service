@@ -7,11 +7,15 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 public class RedisProperties {
+
     @Value("${spring.data.redis.port}")
     private int port;
 
     @Value("${spring.data.redis.host}")
     private String host;
+
+    @Value("${spring.data.redis.channels.post-service.post_view_event_channel.name}")
+    private String postViewChannelName;
 
     @Value("${spring.data.redis.channels.post-service.user-ban-channel.name}")
     private String userBanChannelName;
@@ -21,8 +25,4 @@ public class RedisProperties {
 
     @Value("${spring.data.redis.channels.post-service.post-like-channel.name}")
     private String postLikeEventChannelName;
-
-    @Value("${spring.data.redis.channel.comment-event}")
-    private String commentEventTopicName;
-
 }
