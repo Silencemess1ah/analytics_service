@@ -12,12 +12,16 @@ public enum EventType {
     RECOMMENDATION_RECEIVED,
     ADDED_TO_FAVOURITES,
     PROJECT_INVITE,
+    PROJECT_DONATE,
     TASK_COMPLETED,
     GOAL_COMPLETED,
     ACHIEVEMENT_RECEIVED,
     PROFILE_APPEARED_IN_SEARCH,
     PROJECT_APPEARED_IN_SEARCH,
+    PREMIUM_BOUGHT,
+    FOLLOWER_EVENT,
     ADV_BOUGHT;
+
 
     public static EventType of(int type) {
         for (EventType eventType : EventType.values()) {
