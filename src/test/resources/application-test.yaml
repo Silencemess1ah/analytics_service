@@ -1,13 +1,22 @@
 spring:
   data:
     redis:
+      host: ${spring.redis.host:localhost}
+      port: ${spring.redis.port:6379}
       channel:
         comment: comment_event_test
         post-view: post_view_channel_test
         profile-view: profile_view_channel_test
         profile-view-list: profile_view_list_channel_test
-
+  datasource:
+    url: jdbc:tc:postgresql:latest:///testdb
+    username: test
+    password: test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  liquibase:
+    enabled: true

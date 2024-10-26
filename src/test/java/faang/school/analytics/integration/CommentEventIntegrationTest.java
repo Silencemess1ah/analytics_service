@@ -7,6 +7,7 @@ import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.AnalyticsEventRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static faang.school.analytics.config.TestContainersConfig.redisContainer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
@@ -44,10 +46,16 @@ public class CommentEventIntegrationTest {
     @Autowired
     private Environment environment;
 
+    @BeforeAll
+    public static void startRedisContainer() {
+        redisContainer.start();
+        System.setProperty("spring.redis.host", redisContainer.getHost());
+        System.setProperty("spring.redis.port", redisContainer.getMappedPort(6379).toString());
+    }
+
     @AfterEach
     public void cleanUp() {
         analyticsEventRepository.deleteAll();
-        TestContainersConfig.redisContainer.stop();
     }
 
     @Test

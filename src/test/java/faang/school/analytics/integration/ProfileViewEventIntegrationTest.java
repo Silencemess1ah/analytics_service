@@ -45,7 +45,6 @@ public class ProfileViewEventIntegrationTest {
     @AfterEach
     public void cleanUp() {
         analyticsEventRepository.deleteAll();
-        TestContainersConfig.redisContainer.stop();
     }
 
     @Test

@@ -47,7 +47,6 @@ public class PostViewEventIntegrationTest {
     @AfterEach
     public void cleanUp() {
         analyticsEventRepository.deleteAll();
-        TestContainersConfig.redisContainer.stop();
     }
 
     @Test
