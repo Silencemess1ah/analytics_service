@@ -31,6 +31,7 @@ spring:
         fund-raised: fund_raised_channel
         premium-bought: premium_bought_channel
         project-view: project_view_channel
+        post_view_channel: post_view_channel
 
 server:
   port: 8086
