@@ -1,6 +1,13 @@
 package faang.school.analytics.config;
 
 import faang.school.analytics.listener.*;
+import faang.school.analytics.listener.AdBoughtEventListener;
+import faang.school.analytics.listener.FundRaisedEventListener;
+import faang.school.analytics.listener.LikeEventListener;
+import faang.school.analytics.listener.ProfileViewEventListener;
+import faang.school.analytics.listener.ProjectViewEventListener;
+import faang.school.analytics.listener.RecommendationEventListener;
+import faang.school.analytics.listener.SearchAppearanceEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +44,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.fund-raised}")
     private String fundRaisedChannel;
+
+    @Value("${spring.data.redis.channel.project-view}")
+    private String projectViewChannel;
 
     @Value("${spring.data.redis.channel.premium-bought}")
     private String premiumBoughtChannel;
@@ -81,8 +91,13 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter premiumBoughtEvent (PremiumBoughtEventListener premiumBoughtEventListener) {
+    MessageListenerAdapter premiumBoughtEvent(PremiumBoughtEventListener premiumBoughtEventListener) {
         return new MessageListenerAdapter(premiumBoughtEventListener);
+    }
+
+    @Bean
+    MessageListenerAdapter projectViewEvent(ProjectViewEventListener projectViewEventListener) {
+        return new MessageListenerAdapter(projectViewEventListener);
     }
 
     @Bean
@@ -121,6 +136,11 @@ public class RedisConfig {
     }
 
     @Bean
+    ChannelTopic projectViewTopic() {
+        return new ChannelTopic(projectViewChannel);
+    }
+
+    @Bean
     public RedisMessageListenerContainer redisContainer(LettuceConnectionFactory lettuceConnectionFactory,
                                                         MessageListenerAdapter searchAppearanceEvent,
                                                         MessageListenerAdapter likeEvent,
@@ -128,7 +148,8 @@ public class RedisConfig {
                                                         MessageListenerAdapter adBoughtEvent,
                                                         MessageListenerAdapter profileViewEvent,
                                                         MessageListenerAdapter fundRaisedEvent,
-                                                        MessageListenerAdapter premiumBoughtEvent) {
+                                                        MessageListenerAdapter premiumBoughtEvent,
+                                                        MessageListenerAdapter projectViewEvent) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
         container.addMessageListener(likeEvent, likeTopic());
@@ -139,6 +160,7 @@ public class RedisConfig {
         container.addMessageListener(fundRaisedEvent, fundRaisedTopic());
         container.addMessageListener(premiumBoughtEvent, premiumBoughtTopic());
 
+        container.addMessageListener(projectViewEvent, projectViewTopic());
         return container;
     }
 }
