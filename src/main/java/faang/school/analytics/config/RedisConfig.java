@@ -91,7 +91,7 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter premiumBoughtEvent (PremiumBoughtEventListener premiumBoughtEventListener) {
+    MessageListenerAdapter premiumBoughtEvent(PremiumBoughtEventListener premiumBoughtEventListener) {
         return new MessageListenerAdapter(premiumBoughtEventListener);
     }
 
@@ -148,8 +148,7 @@ public class RedisConfig {
                                                         MessageListenerAdapter adBoughtEvent,
                                                         MessageListenerAdapter profileViewEvent,
                                                         MessageListenerAdapter fundRaisedEvent,
-                                                        MessageListenerAdapter premiumBoughtEvent) {
-                                                        MessageListenerAdapter fundRaisedEvent,
+                                                        MessageListenerAdapter premiumBoughtEvent,
                                                         MessageListenerAdapter projectViewEvent) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
