@@ -1,5 +1,14 @@
 package faang.school.analytics.config;
 
+import faang.school.analytics.listener.AdBoughtEventListener;
+import faang.school.analytics.listener.FundRaisedEventListener;
+import faang.school.analytics.listener.LikeEventListener;
+import faang.school.analytics.listener.PostViewEventListener;
+import faang.school.analytics.listener.PremiumBoughtEventListener;
+import faang.school.analytics.listener.ProfileViewEventListener;
+import faang.school.analytics.listener.ProjectViewEventListener;
+import faang.school.analytics.listener.RecommendationEventListener;
+import faang.school.analytics.listener.SearchAppearanceEventListener;
 import faang.school.analytics.listener.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +46,16 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.fund-raised}")
     private String fundRaisedChannel;
+
+    @Value("${spring.data.redis.channel.project-view}")
+    private String projectViewChannel;
+
+    @Value("${spring.data.redis.channel.premium-bought}")
+    private String premiumBoughtChannel;
+
+    @Value("${spring.data.redis.channel.post_view_channel}")
+    private String postViewChannel;
+
 
     @Value("${spring.data.redis.channel.user-follower}")
     private String userFollowerChannel;
@@ -83,6 +102,21 @@ public class RedisConfig {
     }
 
     @Bean
+    MessageListenerAdapter premiumBoughtEvent(PremiumBoughtEventListener premiumBoughtEventListener) {
+        return new MessageListenerAdapter(premiumBoughtEventListener);
+    }
+
+    @Bean
+    MessageListenerAdapter projectViewEvent(ProjectViewEventListener projectViewEventListener) {
+        return new MessageListenerAdapter(projectViewEventListener);
+    }
+
+    @Bean
+    MessageListenerAdapter postViewEvent(PostViewEventListener postViewEventListener) {
+        return new MessageListenerAdapter(postViewEventListener);
+    }
+
+    @Bean
     public MessageListenerAdapter userFollowerEvent(UserFollowerEventListener userFollowerEventListener) {
         return new MessageListenerAdapter(userFollowerEventListener);
     }
@@ -118,8 +152,23 @@ public class RedisConfig {
     }
 
     @Bean
+    ChannelTopic postViewTopic() {
+        return new ChannelTopic(postViewChannel);
+    }
+
+    @Bean
     ChannelTopic fundRaisedTopic() {
         return new ChannelTopic(fundRaisedChannel);
+    }
+
+    @Bean
+    ChannelTopic premiumBoughtTopic() {
+        return new ChannelTopic(premiumBoughtChannel);
+    }
+
+    @Bean
+    ChannelTopic projectViewTopic() {
+        return new ChannelTopic(projectViewChannel);
     }
 
     @Bean
@@ -139,9 +188,12 @@ public class RedisConfig {
                                                         MessageListenerAdapter recommendationEvent,
                                                         MessageListenerAdapter adBoughtEvent,
                                                         MessageListenerAdapter profileViewEvent,
+                                                        MessageListenerAdapter fundRaisedEvent,
+                                                        MessageListenerAdapter premiumBoughtEvent,
+                                                        MessageListenerAdapter projectViewEvent,
+                                                        MessageListenerAdapter postViewEvent,
                                                         MessageListenerAdapter userFollowerEvent,
-                                                        MessageListenerAdapter projectFollowerEvent,
-                                                        MessageListenerAdapter fundRaisedEvent) {
+                                                        MessageListenerAdapter projectFollowerEvent) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
         container.addMessageListener(likeEvent, likeTopic());
@@ -149,7 +201,10 @@ public class RedisConfig {
         container.addMessageListener(searchAppearanceEvent, searchAppearanceTopic());
         container.addMessageListener(adBoughtEvent, adBoughtTopic());
         container.addMessageListener(profileViewEvent, profileViewTopic());
+        container.addMessageListener(postViewEvent, postViewTopic());
         container.addMessageListener(fundRaisedEvent, fundRaisedTopic());
+        container.addMessageListener(premiumBoughtEvent, premiumBoughtTopic());
+        container.addMessageListener(projectViewEvent, projectViewTopic());
         container.addMessageListener(userFollowerEvent, userFollowerEventTopic());
         container.addMessageListener(projectFollowerEvent, projectFollowerEventTopic());
         return container;
