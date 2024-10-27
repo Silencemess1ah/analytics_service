@@ -1,11 +1,6 @@
 package faang.school.analytics.config;
 
-import faang.school.analytics.listener.AdBoughtEventListener;
-import faang.school.analytics.listener.FundRaisedEventListener;
-import faang.school.analytics.listener.LikeEventListener;
-import faang.school.analytics.listener.ProfileViewEventListener;
-import faang.school.analytics.listener.RecommendationEventListener;
-import faang.school.analytics.listener.SearchAppearanceEventListener;
+import faang.school.analytics.listener.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,8 +38,11 @@ public class RedisConfig {
     @Value("${spring.data.redis.channel.fund-raised}")
     private String fundRaisedChannel;
 
-    @Value("${spring.data.redis.channel.follower_event}")
-    private String followerEventChannel;
+    @Value("${spring.data.redis.channel.user-follower}")
+    private String userFollowerChannel;
+
+    @Value("${spring.data.redis.channel.project-follower}")
+    private String projectFollowerChannel;
 
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -85,6 +83,16 @@ public class RedisConfig {
     }
 
     @Bean
+    public MessageListenerAdapter userFollowerEvent(UserFollowerEventListener userFollowerEventListener) {
+        return new MessageListenerAdapter(userFollowerEventListener);
+    }
+
+    @Bean
+    public MessageListenerAdapter projectFollowerEvent(ProjectFollowerEventListener projectFollowerEventListener) {
+        return new MessageListenerAdapter(projectFollowerEventListener);
+    }
+
+    @Bean
     ChannelTopic likeTopic() {
         return new ChannelTopic(likeChannel);
     }
@@ -115,8 +123,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public ChannelTopic followerEventChannelTopic() {
-        return new ChannelTopic(followerEventChannel);
+    public ChannelTopic userFollowerEventTopic() {
+        return new ChannelTopic(userFollowerChannel);
+    }
+
+    @Bean
+    public ChannelTopic projectFollowerEventTopic() {
+        return new ChannelTopic(projectFollowerChannel);
     }
 
     @Bean
@@ -126,6 +139,8 @@ public class RedisConfig {
                                                         MessageListenerAdapter recommendationEvent,
                                                         MessageListenerAdapter adBoughtEvent,
                                                         MessageListenerAdapter profileViewEvent,
+                                                        MessageListenerAdapter userFollowerEvent,
+                                                        MessageListenerAdapter projectFollowerEvent,
                                                         MessageListenerAdapter fundRaisedEvent) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(lettuceConnectionFactory);
@@ -135,6 +150,8 @@ public class RedisConfig {
         container.addMessageListener(adBoughtEvent, adBoughtTopic());
         container.addMessageListener(profileViewEvent, profileViewTopic());
         container.addMessageListener(fundRaisedEvent, fundRaisedTopic());
+        container.addMessageListener(userFollowerEvent, userFollowerEventTopic());
+        container.addMessageListener(projectFollowerEvent, projectFollowerEventTopic());
         return container;
     }
 }

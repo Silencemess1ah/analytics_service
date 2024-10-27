@@ -28,7 +28,8 @@ spring:
         like: like_channel
         ad-bought: ad_bought_channel
         fund-raised: fund_raised_channel
-        follower_event: follower_event_channel
+        user-follower: user_follower_channel
+        project-follower: project_follower_channel
 
 server:
   port: 8086
