@@ -2,6 +2,7 @@ package faang.school.analytics.mapper.analyticsevent;
 
 import faang.school.analytics.model.dto.AnalyticsEventDto;
 import faang.school.analytics.model.entity.AnalyticsEvent;
+import faang.school.analytics.model.event.SearchAppearance.SearchAppearanceEvent;
 import faang.school.analytics.model.event.AdBoughtEvent;
 import faang.school.analytics.model.event.CommentEvent;
 import faang.school.analytics.model.event.FollowerEvent;
@@ -53,6 +54,11 @@ public interface AnalyticsEventMapper {
     @Mapping(target = "actorId", source = "userId")
     @Mapping(target = "receivedAt", source = "observeTime")
     AnalyticsEvent toEntity(PremiumBoughtEvent premiumBoughtEvent);
+
+    @Mapping(target = "receiverId", source = "foundUserId")
+    @Mapping(target = "actorId", source = "requesterId")
+    @Mapping(target = "receivedAt", source = "requestDateTime")
+    AnalyticsEvent toEntity(SearchAppearanceEvent event);
 
     @Mapping(target = "actorId", source = "authorPostId")
     @Mapping(target = "receiverId", source = "postId")

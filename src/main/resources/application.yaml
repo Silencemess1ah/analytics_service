@@ -36,6 +36,8 @@ spring:
           name: project_view_channel
         premium-bought-channel:
           name: premium_bought_channel
+        search-appearance-channel:
+          name: search_appearance_event
         post-view-channel:
           name: post_view_channel
         mentorship-request-channel:
