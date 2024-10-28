@@ -22,7 +22,6 @@ spring:
       port: 6379
       host: localhost
       channel:
-        follower-event: follower_event_channel
         profile-view: profile_view_channel
         search-appearance: search_appearance_channel
         recommendation: recommendation_channel
@@ -32,6 +31,8 @@ spring:
         premium-bought: premium_bought_channel
         project-view: project_view_channel
         post_view_channel: post_view_channel
+        user-follower: user_follower_channel
+        project-follower: project_follower_channel
 
 server:
   port: 8086
