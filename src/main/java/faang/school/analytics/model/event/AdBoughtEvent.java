@@ -2,15 +2,15 @@ package faang.school.analytics.model.event;
 
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record LikeEvent(
+public record AdBoughtEvent(
         long postId,
         long userId,
-        long likeAuthorId,
-        long postAuthorId,
-        LocalDateTime likedTime
+        BigDecimal paymentAmount,
+        int adDuration,
+        LocalDateTime boughtAt
 ) {
-
 }
