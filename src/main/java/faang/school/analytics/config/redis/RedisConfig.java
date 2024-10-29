@@ -2,6 +2,7 @@ package faang.school.analytics.config.redis;
 
 import faang.school.analytics.listener.FollowerEventListener;
 import faang.school.analytics.listener.GoalEventListener;
+import faang.school.analytics.listener.MentorshipRequestedEventListener;
 import faang.school.analytics.listener.PostLikeEventListener;
 import faang.school.analytics.listener.ProfileViewEventListener;
 import faang.school.analytics.listener.ProjectViewEventListener;
@@ -51,6 +52,11 @@ public class RedisConfig {
     }
 
     @Bean
+    MessageListenerAdapter mentorshipRequestedListener(MentorshipRequestedEventListener mentorshipRequestedEventListener) {
+        return new MessageListenerAdapter(mentorshipRequestedEventListener);
+    }
+
+    @Bean
     RedisMessageListenerContainer redisMessageListenerContainer(
             Map<String, MessageListenerAdapter> listenerAdapters,
             Map<String, ChannelTopic> channelTopics) {
@@ -61,6 +67,7 @@ public class RedisConfig {
         container.addMessageListener(listenerAdapters.get("profileViewListener"), channelTopics.get("profileViewTopic"));
         container.addMessageListener(listenerAdapters.get("projectViewListener"), channelTopics.get("projectViewEventTopic"));
         container.addMessageListener(listenerAdapters.get("postLikeListener"), channelTopics.get("postLikeTopic"));
+        container.addMessageListener(listenerAdapters.get("mentorshipRequestedListener"), channelTopics.get("mentorshipRequestedTopic"));
         return container;
     }
 
@@ -89,5 +96,10 @@ public class RedisConfig {
     ChannelTopic postLikeTopic(
             @Value("${spring.data.redis.channels.like-channel.name}") String postLikeChannelName) {
         return new ChannelTopic(postLikeChannelName);
+    }
+    @Bean(value = "mentorshipRequestedTopic")
+    ChannelTopic mentorshipRequestedTopic(
+            @Value("${spring.data.redis.channels.mentorship-requested-channel.name}") String mentorshipRequestedChannelName ) {
+        return new ChannelTopic(mentorshipRequestedChannelName);
     }
 }
