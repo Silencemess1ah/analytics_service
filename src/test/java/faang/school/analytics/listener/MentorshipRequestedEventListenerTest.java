@@ -42,13 +42,14 @@ public class MentorshipRequestedEventListenerTest {
 
     @BeforeEach
     public void setUp() {
-        String eventJson = "{\"receiverId\":2,\"actorId\":1,\"timestamp\":\"2024-10-17T12:34:56\"}";
+        String eventJson = "{\"requesterId\":10,\"receiverId\":20,\"requestedAt\":\"2024-10-17T12:34:56\"}";
         message = new DefaultMessage("mentorship_requested_channel".getBytes(), eventJson.getBytes());
         mentorshipRequestedEvent = new MentorshipRequestedEventDto();
         mentorshipRequestedEvent.setReceiverId(2L);
         mentorshipRequestedEvent.setActorId(1L);
         mentorshipRequestedEvent.setTimestamp(LocalDateTime.of(2024, 10, 17, 12, 34, 56));
     }
+
 
     @Test
     public void testHandleEventSuccess() throws IOException {

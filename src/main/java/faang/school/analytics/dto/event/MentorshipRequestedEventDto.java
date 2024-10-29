@@ -14,13 +14,13 @@ public class MentorshipRequestedEventDto extends AbstractEventDto {
     }
 
     @Override
-    @JsonProperty("actorId")
+    @JsonProperty("requesterId")
     public void setActorId(Long actorId) {
         this.actorId = actorId;
     }
 
     @Override
-    @JsonProperty("timestamp")
+    @JsonProperty("requestedAt")
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
