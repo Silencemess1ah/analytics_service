@@ -34,6 +34,8 @@ spring:
           name: like_channel
         premium-channel:
           name: premium_channel
+        comment-channel:
+          name: comment_channel
 
 server:
   port: 8086
