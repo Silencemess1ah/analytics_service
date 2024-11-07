@@ -10,15 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface AnalyticsEventService {
+public interface AnalyticsCommentEventService {
+    void saveCommentEvent(CommentEvent event);
 
-    @Transactional
-    void saveEvent(AnalyticsEvent event);
-
-    @Transactional(readOnly = true)
-    List<AnalyticsEventDto> getAnalytics(Long receiverId,
-                                         EventType eventType,
-                                         Interval interval,
-                                         LocalDateTime from,
-                                         LocalDateTime to);
 }
