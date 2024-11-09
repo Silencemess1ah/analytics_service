@@ -22,9 +22,12 @@ spring:
       port: 6379
       host: localhost
       channel:
-        profile-view: profile_view_channel
-        post-view: post_view_channel
-        mentorship_request_received: mentorship_request_received_topic
+         comment: comment_event
+         post-view: post_view_channel
+         profile-view: post_view_channel
+         profile-view-list: profile_view_list_channel
+         premium_bought: premium_bought_event_channel
+         mentorship_request_received: mentorship_request_received_topic
 
 server:
   port: 8086
@@ -34,8 +37,6 @@ project-service:
   port: 8082
 
 app:
-  user-redis-config:
-    profile_view_event_topic: profileViewEvent
   quartz-config:
     user-view-event-save:
       trigger_interval_sec: 10
