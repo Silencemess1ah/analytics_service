@@ -1,9 +1,9 @@
-package faang.school.analytics.listener.mentorshipRequest;
+package faang.school.analytics.listener.mentorship_request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.analytics_event.AnalyticsEventDto;
 import faang.school.analytics.dto.message.MentorshipRequestMessage;
-import faang.school.analytics.mapper.mentorshipRequest.MentorshipRequestMapper;
+import faang.school.analytics.mapper.mentorship_request.MentorshipRequestMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.service.analytics_event.AnalyticsEventService;
@@ -39,7 +39,8 @@ public class MentorshipRequestEventListener implements MessageListener {
             AnalyticsEventDto analyticsEventDto = analyticsEventService.saveEvent(analyticsEvent);
             log.debug("AnalyticsEvent save DB. AnalyticsEventDto: {}", analyticsEventDto);
         } catch (IOException e) {
-            log.error("Error processing message from topic {}, message: {}", message.getChannel(), new String(message.getBody(), StandardCharsets.UTF_8), e);
+            log.error("Error processing message from topic {}, message: {}", message.getChannel(),
+                    new String(message.getBody(), StandardCharsets.UTF_8), e);
             throw new RuntimeException(e);
         }
     }

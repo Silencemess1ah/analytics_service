@@ -1,6 +1,6 @@
 package faang.school.analytics.config.redis;
 
-import faang.school.analytics.listener.mentorshipRequest.MentorshipRequestEventListener;
+import faang.school.analytics.listener.mentorship_request.MentorshipRequestEventListener;
 import faang.school.analytics.listener.like.LikeEventListener;
 import faang.school.analytics.listener.post.PostViewEventListener;
 import faang.school.analytics.listener.project.ProjectViewEventListener;
@@ -63,7 +63,8 @@ public class RedisConfiguration {
     }
 
     @Bean
-    public MessageListenerAdapter mentorshipRequestListener(MentorshipRequestEventListener mentorshipRequestEventListener) {
+    public MessageListenerAdapter mentorshipRequestListener(
+            MentorshipRequestEventListener mentorshipRequestEventListener) {
         return new MessageListenerAdapter(mentorshipRequestEventListener);
     }
 

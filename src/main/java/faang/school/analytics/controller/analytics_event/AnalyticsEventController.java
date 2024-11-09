@@ -26,8 +26,8 @@ public class AnalyticsEventController {
     private final AnalyticsEventService analyticsEventService;
 
     @Operation(summary = "Get analytics from DB",
-            description = "Returns list of Analytics Events " +
-                    "provided by required in body receiverId, eventType and various time")
+            description = "Returns list of Analytics Events "
+                    + "provided by required in body receiverId, eventType and various time")
     @GetMapping
     public List<AnalyticsEventDto> getAnalytics(@Valid @RequestBody AnalyticsEventGetDto analyticsEventGetDto) {
         return analyticsEventService.getAnalytics(analyticsEventGetDto);
