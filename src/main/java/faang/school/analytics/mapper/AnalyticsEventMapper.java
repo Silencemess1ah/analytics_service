@@ -1,8 +1,16 @@
 package faang.school.analytics.mapper;
 
+import faang.school.analytics.dto.comment.CommentEvent;
+import faang.school.analytics.model.AnalyticsEvent;
+import faang.school.analytics.model.EventType;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import faang.school.analytics.dto.PostViewEventDto;
+import faang.school.analytics.dto.user.ProfileViewEventDto;
 import faang.school.analytics.dto.MentorshipRequestReceivedDto;
 import faang.school.analytics.dto.PostViewEventDto;
 import faang.school.analytics.dto.analyticsEvent.AnalyticsEventDto;
+import faang.school.analytics.dto.user.premium.PremiumBoughtEventDto;
 import faang.school.analytics.dto.comment.CommentEvent;
 import faang.school.analytics.dto.user.ProfileViewEventDto;
 import faang.school.analytics.model.AnalyticsEvent;
@@ -20,7 +28,7 @@ public interface AnalyticsEventMapper {
     @Mapping(target = "eventType", expression = "java(EventType.POST_COMMENT)")
     @Mapping(source = "timestamp", target = "receivedAt")
     AnalyticsEvent toAnalyticsEvent(CommentEvent commentEvent);
-    
+
     List<AnalyticsEventDto> toDtoList(List<AnalyticsEvent> events);
 
     AnalyticsEvent toAnalyticsEvent(ProfileViewEventDto analyticsEventService);
@@ -29,6 +37,12 @@ public interface AnalyticsEventMapper {
 
     @Mapping(target = "id", source = "postId", ignore = true)
     AnalyticsEvent postViewEventDtoToAnalyticsEvent(PostViewEventDto dto);
+
+    @Mapping(source = "userId", target = "receiverId")
+    @Mapping(source = "userId", target = "actorId")
+    @Mapping(source = "purchaseDate", target = "receivedAt")
+    AnalyticsEvent toAnalyticsEvent(PremiumBoughtEventDto premiumBoughtEventDto);
+
 
     @Mapping(target = "id", source = "requestId", ignore = true)
     AnalyticsEvent mentorshipRequestReceivedDtoToAnalyticsEvent(MentorshipRequestReceivedDto dto);
