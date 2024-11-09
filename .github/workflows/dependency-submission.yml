@@ -1,4 +1,4 @@
-name: Dependency submission for achievement service
+name: Dependency submission for analytics service
 
 on:
   push:
