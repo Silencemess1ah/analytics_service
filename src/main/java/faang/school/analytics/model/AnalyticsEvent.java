@@ -27,7 +27,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 @Entity
 @Table(name="analytics_event")
 public class AnalyticsEvent {
