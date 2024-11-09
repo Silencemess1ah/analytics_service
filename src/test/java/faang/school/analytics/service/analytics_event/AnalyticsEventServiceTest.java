@@ -79,7 +79,7 @@ public class AnalyticsEventServiceTest {
 
     @Test
     @DisplayName("Saves event in DB return eventDto")
-    public void whenEventPassedThenSavesItInDBAndReturnDto() {
+    public void whenEventPassedThenSavesItInDbAndReturnDto() {
         when(analyticsEventRepository.save(event)).thenReturn(event);
         when(analyticsEventMapper.toAnalyticsEventDto(event)).thenReturn(eventDto);
 
@@ -89,8 +89,8 @@ public class AnalyticsEventServiceTest {
     }
 
     @Test
-    @DisplayName("Find events in DB specified by parameters passed in when interval is present" +
-            " and return list of eventDtos by time")
+    @DisplayName("Find events in DB specified by parameters passed in when interval is present"
+            + " and return list of eventDtos by time")
     public void whenEventGetDtoPassedWithIntervalFindEventsDescribedInItThenReturnEventDtoListSortedByTime() {
         when(userContext.getUserId()).thenReturn(RECEIVER_ID_ONE);
         when(analyticsEventRepository
@@ -105,8 +105,8 @@ public class AnalyticsEventServiceTest {
     }
 
     @Test
-    @DisplayName("Find events in DB specified by parameters passed in when timeUnit and quantity are null" +
-            " and from and to dates are present then return list of eventDtos by time")
+    @DisplayName("Find events in DB specified by parameters passed in when timeUnit and quantity are null"
+            + " and from and to dates are present then return list of eventDtos by time")
     public void whenEventGetDtoPassedWithFromToDatesFindEventsDescribedInItThenReturnEventDtoListSortedByTime() {
         analyticsEventGetDto.setTimeUnit(null);
         analyticsEventGetDto.setTimeQuantity(null);

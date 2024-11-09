@@ -3,25 +3,24 @@ package faang.school.analytics.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.analytics_event.AnalyticsEventDto;
 import faang.school.analytics.dto.message.MentorshipRequestMessage;
-import faang.school.analytics.listener.mentorshipRequest.MentorshipRequestEventListener;
-import faang.school.analytics.mapper.mentorshipRequest.MentorshipRequestMapper;
+import faang.school.analytics.listener.mentorship_request.MentorshipRequestEventListener;
+import faang.school.analytics.mapper.mentorship_request.MentorshipRequestMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.service.analytics_event.AnalyticsEventService;
-import org.springframework.data.redis.connection.Message;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.springframework.data.redis.connection.Message;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MentorshipRequestEventListenerTest {

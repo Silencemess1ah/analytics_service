@@ -19,9 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest(
-        classes = {
-                AnalyticsServiceApp.class
-        }
+        classes = {AnalyticsServiceApp.class}
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ActiveProfiles("test")

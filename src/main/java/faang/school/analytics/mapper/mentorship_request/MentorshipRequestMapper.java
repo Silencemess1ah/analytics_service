@@ -1,4 +1,4 @@
-package faang.school.analytics.mapper.mentorshipRequest;
+package faang.school.analytics.mapper.mentorship_request;
 
 import faang.school.analytics.dto.message.MentorshipRequestMessage;
 import faang.school.analytics.model.AnalyticsEvent;

@@ -66,7 +66,7 @@ public class LikeEventListenerTest {
 
     @Test
     @DisplayName("If IOException while reading then throw exception")
-    void whenIOExceptionOccursThenThrowsException() throws Exception {
+    void whenIoeExceptionOccursThenThrowsException() throws Exception {
         when(message.getBody()).thenReturn(new byte[0]);
         when(objectMapper.readValue(any(byte[].class), eq(LikeEventDto.class))).thenThrow(new IOException());
         assertThrows(RuntimeException.class, () -> likeEventListener.onMessage(message, null));

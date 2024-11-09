@@ -1,0 +1,26 @@
+name: Dependency submission for achievement service
+
+on:
+  push:
+    branches:
+      - unicorn-master-stream6
+  pull_request:
+    branches:
+      - unicorn-master-stream6
+
+permissions:
+  contents: write
+
+jobs:
+  dependency-submission:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 17
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582

@@ -1,7 +1,7 @@
 package faang.school.analytics.mapper;
 
 import faang.school.analytics.dto.message.MentorshipRequestMessage;
-import faang.school.analytics.mapper.mentorshipRequest.MentorshipRequestMapperImpl;
+import faang.school.analytics.mapper.mentorship_request.MentorshipRequestMapperImpl;
 import faang.school.analytics.model.AnalyticsEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +21,11 @@ class MentorshipRequestMapperTest {
 
     @Test
     @DisplayName("success mapping MentorshipRequestMessage to AnalyticsEvent")
-    void testToAnalyticsEvent(){
+    void testToAnalyticsEvent() {
         var message = MentorshipRequestMessage.builder()
                 .requesterId(1)
                 .receiverId(2)
-                .createdAt(LocalDateTime.of(1,11, 11, 22, 33))
+                .createdAt(LocalDateTime.of(1, 11, 11, 22, 33))
                 .build();
 
         AnalyticsEvent event = mapper.toAnalyticsEvent(message);
