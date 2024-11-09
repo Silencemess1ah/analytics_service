@@ -4,21 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.MentorshipRequestReceivedDto;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
+import faang.school.analytics.redis.listener.MentorshipRequestReceivedEventListener;
 import faang.school.analytics.service.AnalyticsEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.redis.connection.Message;
 
-import java.io.IOException;
+import java.time.LocalDateTime;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,46 +22,37 @@ import static org.mockito.Mockito.when;
 public class MentorshipRequestReceivedEventListenerTest {
 
     @Mock
-    private ObjectMapper objectMapper;
-
-    @Mock
     private AnalyticsEventService analyticsEventService;
-
     @Mock
     private AnalyticsEventMapper analyticsEventMapper;
+    @Mock
+    private ObjectMapper objectMapper;
 
-    @InjectMocks
-    private MentorshipRequestReceivedEventListener listener;
-
-    private Message message;
-    private MentorshipRequestReceivedDto dto;
-    private AnalyticsEvent analyticsEvent;
+    private MentorshipRequestReceivedEventListener mentorshipRequestReceivedEventListener;
 
     @BeforeEach
     void setUp() {
-        dto = new MentorshipRequestReceivedDto();
-        analyticsEvent = new AnalyticsEvent();
-        message = mock(Message.class);
+        mentorshipRequestReceivedEventListener = new MentorshipRequestReceivedEventListener(
+                objectMapper,
+                analyticsEventService,
+                analyticsEventMapper,
+                "testViewChannel"
+        );
     }
 
     @Test
-    void testOnMessage_Success() throws Exception {
-        when(message.getBody()).thenReturn(new byte[]{});
-        when(objectMapper.readValue(any(byte[].class), eq(MentorshipRequestReceivedDto.class))).thenReturn(dto);
-        when(analyticsEventMapper.mentorshipRequestReceivedDtoToAnalyticsEvent(dto)).thenReturn(analyticsEvent);
+    void testSaveEvent() {
+        MentorshipRequestReceivedDto mentorshipRequestReceivedDto =
+                new MentorshipRequestReceivedDto(1L, 2L, 3L, LocalDateTime.now());
+        AnalyticsEvent analyticsEvent = new AnalyticsEvent();
 
-        listener.onMessage(message, null);
+        when(analyticsEventMapper.mentorshipRequestReceivedDtoToAnalyticsEvent(mentorshipRequestReceivedDto))
+                .thenReturn(analyticsEvent);
 
-        verify(analyticsEventService).saveEvent(analyticsEvent);
-    }
+        mentorshipRequestReceivedEventListener.saveEvent(mentorshipRequestReceivedDto);
 
-    @Test
-    void testOnMessage_Exception() throws Exception {
-        when(message.getBody()).thenReturn(new byte[]{});
-        when(objectMapper.readValue(any(byte[].class), eq(MentorshipRequestReceivedDto.class))).thenThrow(new IOException("Parsing error"));
-
-        listener.onMessage(message, null);
-
-        verify(analyticsEventService, never()).saveEvent(any());
+        verify(analyticsEventMapper, times(1))
+                .mentorshipRequestReceivedDtoToAnalyticsEvent(mentorshipRequestReceivedDto);
+        verify(analyticsEventService, times(1)).saveEvent(analyticsEvent);
     }
 }
