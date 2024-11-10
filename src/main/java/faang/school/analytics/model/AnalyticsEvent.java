@@ -23,10 +23,10 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 @Entity
 @Table(name="analytics_event")
 public class AnalyticsEvent {

@@ -22,11 +22,12 @@ spring:
       port: 6379
       host: localhost
       channel:
-         comment: comment_event
-         post-view: post_view_channel
-         profile-view: post_view_channel
-         profile-view-list: profile_view_list_channel
-         premium_bought: premium_bought_event_channel
+        profile-view: profile_view_channel
+        comment: comment_event
+        post-view: post_view_channel
+        mentorship_request_received: mentorship_request_received_topic
+        profile-view-list: profile_view_list_channel
+        premium_bought: premium_bought_event_channel
 
 
 server:
