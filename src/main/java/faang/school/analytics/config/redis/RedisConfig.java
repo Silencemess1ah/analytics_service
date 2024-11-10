@@ -1,10 +1,5 @@
 package faang.school.analytics.config.redis;
 
-import faang.school.analytics.listener.FollowerEventListener;
-import faang.school.analytics.listener.GoalEventListener;
-import faang.school.analytics.listener.PostLikeEventListener;
-import faang.school.analytics.listener.PostViewEventListener;
-import faang.school.analytics.listener.ProfileViewEventListener;
 import faang.school.analytics.config.redis.eventconfig.EventRedisConfig;
 import faang.school.analytics.config.redis.eventconfig.PremiumBoughtEventRedisConfig;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 import java.util.List;
 
@@ -38,21 +32,14 @@ public class RedisConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         eventRedisConfigs.forEach(
-            config -> container.addMessageListener(config.getAdapter(), config.getTopic())
+                config -> container.addMessageListener(config.getAdapter(), config.getTopic())
         );
         return container;
     }
-
 
     @Bean(value = "postLikeTopic")
     ChannelTopic postLikeTopic(
             @Value("${spring.data.redis.channels.like-channel.name}") String postLikeChannelName) {
         return new ChannelTopic(postLikeChannelName);
-    }
-
-    @Bean(value = "postViewChannel")
-    public ChannelTopic postViewChannel(
-            @Value("${spring.data.redis.channels.post-view-channel.name}") String postViewChannelName) {
-        return new ChannelTopic(postViewChannelName);
     }
 }

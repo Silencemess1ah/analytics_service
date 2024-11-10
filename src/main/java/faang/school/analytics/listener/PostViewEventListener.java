@@ -10,7 +10,7 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
+@Component("postViewEventListener")
 public class PostViewEventListener extends AbstractEventListener<PostViewEventDto> {
     public PostViewEventListener(ObjectMapper objectMapper,
                                  AnalyticsEventMapper analyticsEventMapper,
