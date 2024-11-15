@@ -19,6 +19,7 @@ public class AnalyticsEventService {
     public ResponseEntity<Void> saveAction(AnalyticsEventDto analyticsEventDto) {
         log.info("getting action: {}, from userId: {}", analyticsEventDto.toString(), analyticsEventDto.getReceiverId());
         analyticsEventRepository.save(analyticsEventMapper.toEntity(analyticsEventDto));
+        log.info("success saved action of userId: {}", analyticsEventDto.getReceiverId());
         return ResponseEntity.ok().build();
     }
 }
