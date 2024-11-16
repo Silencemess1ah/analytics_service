@@ -1,7 +1,9 @@
 package faang.school.analytics.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum EventType {
     PROFILE_VIEW(0.5),
@@ -30,5 +32,14 @@ public enum EventType {
             }
         }
         throw new IllegalArgumentException("Unknown event type: " + type);
+    }
+
+    public static double getWeightByName(String name) {
+        for (EventType eventType : EventType.values()) {
+            if (eventType.name().equals(name)) {
+                return eventType.getWeight();
+            }
+        }
+        throw new IllegalArgumentException("Unknown event type: " + name);
     }
 }
