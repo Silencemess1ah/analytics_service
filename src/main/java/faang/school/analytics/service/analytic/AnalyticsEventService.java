@@ -1,8 +1,8 @@
-package faang.school.analytics.service;
+package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
-import faang.school.analytics.repository.AnalyticsEventRepository;
+import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
