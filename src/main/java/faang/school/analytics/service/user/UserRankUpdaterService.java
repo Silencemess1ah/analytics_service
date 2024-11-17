@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,15 +24,15 @@ public class UserRankUpdaterService {
     private final static int BATCH_SIZE = 50;
     private final UserRepository userRepository;
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Transactional
     public void updateUsersRankInBatch(Map<Long, Double> usersNewRanksByLastThreeHourActions) {
         log.info("batch is starting {}", usersNewRanksByLastThreeHourActions);
-        int batchCounter = 0;
+        int batchCounter = 1;
         for (Map.Entry<Long, Double> userNewRank : usersNewRanksByLastThreeHourActions.entrySet()) {
             if (userNewRank.getValue() != 0.0) {
-                try{
+                try {
                     BigDecimal value = BigDecimal.valueOf(userNewRank.getValue());
                     BigDecimal roundedValue = value.setScale(2, RoundingMode.HALF_UP);
                     userRepository.updateUserRankByUserId(userNewRank.getKey(), roundedValue.doubleValue());
