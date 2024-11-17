@@ -7,10 +7,13 @@ import java.util.List;
 @Service
 public class StandardDeviationCalculator {
 
-    public double calculate(List<Integer> sumOfUsersActions, double averageValueOfAction, int allUsersSize) {
+    public Double calculate(List<Integer> sumOfUsersActions, Double averageValueOfAction, int activeUsersSize) {
+        if(sumOfUsersActions == null || averageValueOfAction == null || activeUsersSize == 0) {
+            return null;
+        }
         double standardDeviation = sumOfUsersActions.stream()
                 .mapToDouble(num -> Math.pow(num - averageValueOfAction, 2))
-                .sum() / allUsersSize;
+                .sum() / activeUsersSize;
         return Math.sqrt(standardDeviation);
     }
 }

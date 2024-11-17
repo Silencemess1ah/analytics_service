@@ -1,4 +1,4 @@
-package faang.school.analytics.service;
+package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsEventFilterDto;
