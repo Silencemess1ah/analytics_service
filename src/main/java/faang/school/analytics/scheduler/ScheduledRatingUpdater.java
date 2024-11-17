@@ -33,7 +33,7 @@ public class ScheduledRatingUpdater {
     private final UserService userService;
 
     @Async
-    @Scheduled(cron = "0 * * * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 0 */3 * * *", zone = "Europe/Moscow")
     public void updateUserRankScore() {
         Map<Long, Double> usersNewRanksByLastThreeHourActions = new HashMap<>();
         log.info("updating users rank is starting");

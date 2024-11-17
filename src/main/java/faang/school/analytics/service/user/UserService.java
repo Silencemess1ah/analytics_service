@@ -1,5 +1,6 @@
 package faang.school.analytics.service.user;
 
+import faang.school.analytics.entity.User;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.user.UserRepository;
@@ -35,5 +36,10 @@ public class UserService {
         return usersActionsSumByEventType.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("user not found!"));
     }
 }
