@@ -1,21 +1,27 @@
 package faang.school.analytics.service.user;
 
+import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.user.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserRankUpdaterService {
+    @Value("${rating-growth-intensive}")
+    private double ratingGrowthIntensive;
     private final static int BATCH_SIZE = 50;
     private final UserRepository userRepository;
     @PersistenceContext
@@ -26,7 +32,7 @@ public class UserRankUpdaterService {
         log.info("batch is starting {}", usersNewRanksByLastThreeHourActions);
         int batchCounter = 0;
         for (Map.Entry<Long, Double> userNewRank : usersNewRanksByLastThreeHourActions.entrySet()) {
-            if (userNewRank.getValue().doubleValue() != 0) {
+            if (userNewRank.getValue() != 0.0) {
                 try{
                     BigDecimal value = BigDecimal.valueOf(userNewRank.getValue());
                     BigDecimal roundedValue = value.setScale(2, RoundingMode.HALF_UP);
@@ -41,6 +47,11 @@ public class UserRankUpdaterService {
                 flushAndClear();
             }
         }
+        BigDecimal maxPossibleRating = BigDecimal.valueOf(EventType.getMaximumRating() * ratingGrowthIntensive);
+        BigDecimal roundedValue = maxPossibleRating.setScale(2, RoundingMode.HALF_UP);
+        Set<Long> activeUsersIds = usersNewRanksByLastThreeHourActions.keySet();
+        userRepository.updatePassiveUsersRatingWhichRatingLessThanRating(roundedValue.doubleValue(), activeUsersIds);
+        userRepository.updatePassiveUsersRatingWhichRatingMoreThanRating(roundedValue.doubleValue(), activeUsersIds);
         flushAndClear();
     }
 

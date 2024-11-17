@@ -3,6 +3,8 @@ package faang.school.analytics.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 public enum EventType {
@@ -41,5 +43,11 @@ public enum EventType {
             }
         }
         throw new IllegalArgumentException("Unknown event type: " + name);
+    }
+
+    public static double getMaximumRating() {
+        return Arrays.stream(EventType.values())
+                .mapToDouble(EventType::getWeight)
+                .sum();
     }
 }
