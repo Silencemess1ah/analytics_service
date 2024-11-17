@@ -1,14 +1,16 @@
 package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.dto.AnalyticsEventDto;
+import faang.school.analytics.entity.User;
 import faang.school.analytics.mapper.AnalyticsEventMapperImpl;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
-import faang.school.analytics.service.analytic.AnalyticsEventService;
+import faang.school.analytics.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -36,6 +38,9 @@ public class AnalyticsEventServiceTest {
     @Spy
     private AnalyticsEventMapperImpl analyticsEventMapper;
 
+    @Mock
+    private UserService userService;
+
     private AnalyticsEventDto analyticsEventDto;
     private final AnalyticsEventDto analyticsEventDtoWithWrongEventTypeNumber =
             AnalyticsEventDto.builder()
@@ -54,18 +59,21 @@ public class AnalyticsEventServiceTest {
 
     @Test
     public void saveAction_WithCorrectDto_ReturnOK() {
+        ArgumentCaptor<AnalyticsEvent> analyticsEventArgumentCaptor = ArgumentCaptor.forClass(AnalyticsEvent.class);
         AnalyticsEvent analyticsEvent = analyticsEventMapper.toEntity(analyticsEventDto);
-        when(analyticsEventRepository.save(analyticsEvent))
+        when(analyticsEventRepository.save(analyticsEventArgumentCaptor.capture()))
                 .thenReturn(analyticsEvent);
+        when(userService.findById(2L))
+                .thenReturn(User.builder().build());
 
         ResponseEntity<Void> response = analyticsEventService.saveAction(analyticsEventDto);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(analyticsEventRepository, times(1)).save(analyticsEvent);
+        verify(analyticsEventRepository, times(1)).save(analyticsEventArgumentCaptor.capture());
     }
 
     @Test
     public void saveAction_WithWrongDto_ThrowIllegalArgumentException() {
-         assertThrows(IllegalArgumentException.class,
-                 () -> analyticsEventMapper.toEntity(analyticsEventDtoWithWrongEventTypeNumber));
+        assertThrows(IllegalArgumentException.class,
+                () -> analyticsEventMapper.toEntity(analyticsEventDtoWithWrongEventTypeNumber));
     }
 }

@@ -1,7 +1,8 @@
-package faang.school.analytics.scheduler;
+package faang.school.analytics.scheduler.analytic;
 
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
+import faang.school.analytics.service.analytic.AnalyticsEventService;
 import faang.school.analytics.service.analytic.AverageValueOfActionCalculator;
 import faang.school.analytics.service.analytic.StandardDeviationCalculator;
 import faang.school.analytics.service.user.UserRankUpdaterService;
@@ -31,6 +32,7 @@ public class ScheduledRatingUpdater {
     private final StandardDeviationCalculator standardDeviationCalculator;
     private final UserRankUpdaterService userRankUpdaterService;
     private final UserService userService;
+    private final AnalyticsEventService analyticsEventService;
 
     @Async
     @Scheduled(cron = "0 0 */3 * * *", zone = "Europe/Moscow")
@@ -40,7 +42,7 @@ public class ScheduledRatingUpdater {
         for (EventType eventType : EventType.values()) {
             String currentEventType = eventType.name();
 
-            HashMap<Long, Integer> userActionsCountByUserId = userService.mapToUsersActionsByEventType(
+            Map<Long, Integer> userActionsCountByUserId = analyticsEventService.mapAnalyticEventsToActorActionsCount(
                     analyticsEventRepository.findUserActionCountByEventTypeAndTimeLimit(currentEventType)
                             .orElseGet(ArrayList::new)
             );
@@ -77,6 +79,6 @@ public class ScheduledRatingUpdater {
         if (resultOfMinusUserActionCountAndAverageValueOfAction == 0.0) {
             return EventType.getWeightByName(currentEventType);
         }
-        return (userActionsCount - averageValueOfAction) / standardDeviationOfAction;
+        return (((userActionsCount - averageValueOfAction) / standardDeviationOfAction) * 100) / 100;
     }
 }
