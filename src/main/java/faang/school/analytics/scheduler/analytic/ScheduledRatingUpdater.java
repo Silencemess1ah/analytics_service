@@ -1,6 +1,7 @@
 package faang.school.analytics.scheduler.analytic;
 
 import faang.school.analytics.client.user.UserServiceClient;
+import faang.school.analytics.config.context.UserContext;
 import faang.school.analytics.mapper.user.UpdateUsersRankMapper;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
@@ -33,9 +34,10 @@ public class ScheduledRatingUpdater {
     private final UserServiceClient userServiceClient;
     private final AnalyticsEventService analyticsEventService;
     private final UpdateUsersRankMapper updateUsersRankMapper;
+    private final UserContext userContext;
 
     @Async
-    @Scheduled(cron = "0 0 */3 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 * * * * *", zone = "Europe/Moscow")
     public void updateUserRankScore() {
         Map<Long, Double> usersRankById = new HashMap<>();
         log.info("updating users rank is starting");
@@ -68,6 +70,7 @@ public class ScheduledRatingUpdater {
                         actionCount, EventType.getWeightByName(currentEventType), usersRankById.get(userId));
             });
         }
+        userContext.setUserId(1L);
         userServiceClient
                 .updateUsersRankByUserIds(updateUsersRankMapper.mapUsersRankByIdToUpdateUsersRankDto(usersRankById));
     }
