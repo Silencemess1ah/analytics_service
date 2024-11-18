@@ -35,4 +35,9 @@ project-service:
   host: localhost
   port: 8082
 
+user-service:
+  name: UserService
+  host: localhost
+  port: 8080
+
 rating-growth-intensive: 0.05

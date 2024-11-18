@@ -6,8 +6,7 @@ import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import faang.school.analytics.service.analytic.AnalyticsEventService;
 import faang.school.analytics.service.analytic.AverageValueOfActionCalculator;
 import faang.school.analytics.service.analytic.StandardDeviationCalculator;
-import faang.school.analytics.service.user.UserRankUpdaterService;
-import faang.school.analytics.service.user.UserService;
+import faang.school.analytics.service.analytic.UserRankUpdaterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -49,16 +48,10 @@ class ScheduledRatingUpdaterTest {
     private UserRankUpdaterService userRankUpdaterService;
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private AnalyticsEventService analyticsEventService;
 
     @InjectMocks
     private ScheduledRatingUpdater scheduledRatingUpdater;
-
-    @Captor
-    private ArgumentCaptor<Map<Long, Double>> userRankCaptor;
 
     @Captor
     private ArgumentCaptor<List<AnalyticsEvent>> userActionsCountByUserIdCaptor;
@@ -74,7 +67,7 @@ class ScheduledRatingUpdaterTest {
                         AnalyticsEvent.builder().actorId(1L).build())));
         when(analyticsEventService.mapAnalyticEventsToActorActionsCount(userActionsCountByUserIdCaptor.capture()))
                 .thenReturn(Map.of(1L, 2));
-        when(userService.getSumOfUsersActionsByEventType(Arrays.asList(2)))
+        when(analyticsEventService.getSumOfUsersActionsByEventType(List.of(2)))
                 .thenReturn(2);
 
         scheduledRatingUpdater.updateUserRankScore();

@@ -1,7 +1,8 @@
-package faang.school.analytics.service.user;
+package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.user.UserRepository;
+import faang.school.analytics.service.analytic.UserRankUpdaterService;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
