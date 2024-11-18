@@ -1,12 +1,14 @@
 package faang.school.analytics.scheduler.analytic;
 
+import faang.school.analytics.client.user.UserServiceClient;
+import faang.school.analytics.dto.user.UpdateUsersRankDto;
+import faang.school.analytics.mapper.user.UpdateUsersRankMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import faang.school.analytics.service.analytic.AnalyticsEventService;
 import faang.school.analytics.service.analytic.AverageValueOfActionCalculator;
 import faang.school.analytics.service.analytic.StandardDeviationCalculator;
-import faang.school.analytics.service.analytic.UserRankUpdaterService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +47,10 @@ class ScheduledRatingUpdaterTest {
     private StandardDeviationCalculator standardDeviationCalculator;
 
     @Mock
-    private UserRankUpdaterService userRankUpdaterService;
+    private UserServiceClient userServiceClient;
+
+    @Mock
+    private UpdateUsersRankMapper updateUsersRankMapper;
 
     @Mock
     private AnalyticsEventService analyticsEventService;
@@ -57,7 +62,10 @@ class ScheduledRatingUpdaterTest {
     private ArgumentCaptor<List<AnalyticsEvent>> userActionsCountByUserIdCaptor;
 
     @Captor
-    ArgumentCaptor<Map<Long, Double>> usersNewRanksByLastThreeHourActionsCaptor;
+    ArgumentCaptor<UpdateUsersRankDto> usersNewRanksByLastThreeHourActionsCaptor;
+
+    @Captor
+    ArgumentCaptor<Map<Long, Double>> usersRankById;
 
     @Test
     void updateUserRankScore_shouldCallUpdateUsersRankInBatch() {
@@ -69,14 +77,18 @@ class ScheduledRatingUpdaterTest {
                 .thenReturn(Map.of(1L, 2));
         when(analyticsEventService.getSumOfUsersActionsByEventType(List.of(2)))
                 .thenReturn(2);
+        when(updateUsersRankMapper.mapUsersRankByIdToUpdateUsersRankDto(usersRankById.capture()))
+                .thenReturn(UpdateUsersRankDto.builder()
+                        .usersRankByIds(Map.of(1L, 2.0))
+                        .build());
 
         scheduledRatingUpdater.updateUserRankScore();
 
-        verify(userRankUpdaterService, times(1))
-                .updateUsersRankInBatch(usersNewRanksByLastThreeHourActionsCaptor.capture());
-        assertNotNull(usersNewRanksByLastThreeHourActionsCaptor.getValue());
-        assertEquals(Set.of(1L), usersNewRanksByLastThreeHourActionsCaptor.getValue().keySet());
-        assertEquals(1, usersNewRanksByLastThreeHourActionsCaptor.getValue().keySet().size());
+        verify(userServiceClient, times(1))
+                .updateUsersRankByUserIds(usersNewRanksByLastThreeHourActionsCaptor.capture());
+        assertNotNull(usersNewRanksByLastThreeHourActionsCaptor.getValue().getUsersRankByIds());
+        assertEquals(Set.of(1L), usersNewRanksByLastThreeHourActionsCaptor.getValue().getUsersRankByIds().keySet());
+        assertEquals(1, usersNewRanksByLastThreeHourActionsCaptor.getValue().getUsersRankByIds().keySet().size());
     }
 
     @ParameterizedTest
@@ -116,5 +128,3 @@ class ScheduledRatingUpdaterTest {
         assertNotEquals(EventType.getWeightByName(currentEventType), res);
     }
 }
-
-

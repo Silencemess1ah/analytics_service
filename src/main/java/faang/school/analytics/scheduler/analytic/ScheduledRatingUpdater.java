@@ -1,11 +1,12 @@
 package faang.school.analytics.scheduler.analytic;
 
+import faang.school.analytics.client.user.UserServiceClient;
+import faang.school.analytics.mapper.user.UpdateUsersRankMapper;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import faang.school.analytics.service.analytic.AnalyticsEventService;
 import faang.school.analytics.service.analytic.AverageValueOfActionCalculator;
 import faang.school.analytics.service.analytic.StandardDeviationCalculator;
-import faang.school.analytics.service.analytic.UserRankUpdaterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,19 +24,20 @@ import java.util.Map;
 @EnableScheduling
 @RequiredArgsConstructor
 public class ScheduledRatingUpdater {
-    @Value("${rating-growth-intensive}")
+    @Value("${rating.growth-intensive}")
     private double ratingGrowthIntensive;
 
     private final AnalyticsEventRepository analyticsEventRepository;
     private final AverageValueOfActionCalculator averageValueOfActionCalculator;
     private final StandardDeviationCalculator standardDeviationCalculator;
-    private final UserRankUpdaterService userRankUpdaterService;
+    private final UserServiceClient userServiceClient;
     private final AnalyticsEventService analyticsEventService;
+    private final UpdateUsersRankMapper updateUsersRankMapper;
 
     @Async
     @Scheduled(cron = "0 0 */3 * * *", zone = "Europe/Moscow")
     public void updateUserRankScore() {
-        Map<Long, Double> usersNewRanksByLastThreeHourActions = new HashMap<>();
+        Map<Long, Double> usersRankById = new HashMap<>();
         log.info("updating users rank is starting");
         for (EventType eventType : EventType.values()) {
             String currentEventType = eventType.name();
@@ -61,12 +63,13 @@ public class ScheduledRatingUpdater {
                 double rankIncrement = calculateZScore(avgAction, stdDev, actionCount, currentEventType)
                         * ratingGrowthIntensive
                         * EventType.getWeightByName(currentEventType);
-                usersNewRanksByLastThreeHourActions.merge(userId, rankIncrement, Double::sum);
+                usersRankById.merge(userId, rankIncrement, Double::sum);
                 log.info("action count: {}, event type weight: {}, rating: {}",
-                        actionCount, EventType.getWeightByName(currentEventType), usersNewRanksByLastThreeHourActions.get(userId));
+                        actionCount, EventType.getWeightByName(currentEventType), usersRankById.get(userId));
             });
         }
-        userRankUpdaterService.updateUsersRankInBatch(usersNewRanksByLastThreeHourActions);
+        userServiceClient
+                .updateUsersRankByUserIds(updateUsersRankMapper.mapUsersRankByIdToUpdateUsersRankDto(usersRankById));
     }
 
     public double calculateZScore(Double averageValueOfAction, Double standardDeviationOfAction, Integer userActionsCount, String currentEventType) {

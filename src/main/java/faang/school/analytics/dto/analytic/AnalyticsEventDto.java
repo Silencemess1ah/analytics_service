@@ -1,4 +1,4 @@
-package faang.school.analytics.dto;
+package faang.school.analytics.dto.analytic;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
