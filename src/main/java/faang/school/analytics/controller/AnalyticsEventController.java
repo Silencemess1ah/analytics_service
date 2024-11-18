@@ -1,6 +1,6 @@
 package faang.school.analytics.controller;
 
-import faang.school.analytics.dto.AnalyticsEventDto;
+import faang.school.analytics.dto.analytic.AnalyticsEventDto;
 import faang.school.analytics.service.analytic.AnalyticsEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

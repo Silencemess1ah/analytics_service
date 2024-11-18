@@ -1,4 +1,4 @@
-package faang.school.analytics.dto;
+package faang.school.analytics.dto.analytic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;

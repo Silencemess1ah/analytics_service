@@ -40,4 +40,8 @@ user-service:
   host: localhost
   port: 8080
 
-rating-growth-intensive: 0.05
+rating:
+  growth-intensive: 0.05
+  half-max-rank: 50.0
+  max-user-rating: 100.0
+  min-user-rating: 0.0

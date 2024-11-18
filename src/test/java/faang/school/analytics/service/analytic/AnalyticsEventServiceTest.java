@@ -1,7 +1,7 @@
 package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.client.user.UserServiceClient;
-import faang.school.analytics.dto.AnalyticsEventDto;
+import faang.school.analytics.dto.analytic.AnalyticsEventDto;
 import faang.school.analytics.dto.user.UserDto;
 import faang.school.analytics.mapper.AnalyticsEventMapperImpl;
 import faang.school.analytics.model.AnalyticsEvent;
