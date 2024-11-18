@@ -5,8 +5,7 @@ import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import faang.school.analytics.service.analytic.AnalyticsEventService;
 import faang.school.analytics.service.analytic.AverageValueOfActionCalculator;
 import faang.school.analytics.service.analytic.StandardDeviationCalculator;
-import faang.school.analytics.service.user.UserRankUpdaterService;
-import faang.school.analytics.service.user.UserService;
+import faang.school.analytics.service.analytic.UserRankUpdaterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +30,6 @@ public class ScheduledRatingUpdater {
     private final AverageValueOfActionCalculator averageValueOfActionCalculator;
     private final StandardDeviationCalculator standardDeviationCalculator;
     private final UserRankUpdaterService userRankUpdaterService;
-    private final UserService userService;
     private final AnalyticsEventService analyticsEventService;
 
     @Async
@@ -47,7 +45,7 @@ public class ScheduledRatingUpdater {
                             .orElseGet(ArrayList::new)
             );
 
-            int totalActionsSum = userService
+            int totalActionsSum = analyticsEventService
                     .getSumOfUsersActionsByEventType(new ArrayList<>(userActionsCountByUserId.values()));
             int totalUsersActionCount = userActionsCountByUserId.size();
             log.info("total actions sum: {}, by event type: {}, on active users count: {}",

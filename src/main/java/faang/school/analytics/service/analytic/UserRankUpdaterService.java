@@ -1,4 +1,4 @@
-package faang.school.analytics.service.user;
+package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.user.UserRepository;

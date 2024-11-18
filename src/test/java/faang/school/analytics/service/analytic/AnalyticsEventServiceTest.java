@@ -1,12 +1,12 @@
 package faang.school.analytics.service.analytic;
 
+import faang.school.analytics.client.user.UserServiceClient;
 import faang.school.analytics.dto.AnalyticsEventDto;
-import faang.school.analytics.entity.User;
+import faang.school.analytics.dto.user.UserDto;
 import faang.school.analytics.mapper.AnalyticsEventMapperImpl;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
-import faang.school.analytics.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,7 +40,7 @@ public class AnalyticsEventServiceTest {
     private AnalyticsEventMapperImpl analyticsEventMapper;
 
     @Mock
-    private UserService userService;
+    private UserServiceClient userServiceClient;
 
     private AnalyticsEventDto analyticsEventDto;
     private final AnalyticsEventDto analyticsEventDtoWithWrongEventTypeNumber =
@@ -63,8 +64,8 @@ public class AnalyticsEventServiceTest {
         AnalyticsEvent analyticsEvent = analyticsEventMapper.toEntity(analyticsEventDto);
         when(analyticsEventRepository.save(analyticsEventArgumentCaptor.capture()))
                 .thenReturn(analyticsEvent);
-        when(userService.findById(2L))
-                .thenReturn(User.builder().build());
+        when(userServiceClient.getUser(2L))
+                .thenReturn(ResponseEntity.ok().body(UserDto.builder().build()));
 
         ResponseEntity<Void> response = analyticsEventService.saveAction(analyticsEventDto);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -75,5 +76,19 @@ public class AnalyticsEventServiceTest {
     public void saveAction_WithWrongDto_ThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
                 () -> analyticsEventMapper.toEntity(analyticsEventDtoWithWrongEventTypeNumber));
+    }
+
+    @Test
+    void getSumOfUsersActionsByEventTypeTest_ReturnTen() {
+        int res = analyticsEventService.getSumOfUsersActionsByEventType(List.of(1, 2, 3, 4));
+
+        assertEquals(10, res);
+    }
+
+    @Test
+    void getSumOfUsersActionsByEventTypeTest_ReturnZero() {
+        int res = analyticsEventService.getSumOfUsersActionsByEventType(List.of());
+
+        assertEquals(0, res);
     }
 }

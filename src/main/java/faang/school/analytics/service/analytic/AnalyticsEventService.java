@@ -1,10 +1,10 @@
 package faang.school.analytics.service.analytic;
 
+import faang.school.analytics.client.user.UserServiceClient;
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
-import faang.school.analytics.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,12 @@ public class AnalyticsEventService {
 
     private final AnalyticsEventRepository analyticsEventRepository;
     private final AnalyticsEventMapper analyticsEventMapper;
-    private final UserService userService;
+    private final UserServiceClient userServiceClient;
 
     public ResponseEntity<Void> saveAction(AnalyticsEventDto analyticsEventDto) {
-        userService.findById(analyticsEventDto.getReceiverId());
+        userServiceClient.getUser(analyticsEventDto.getReceiverId());
         analyticsEventDto.setReceivedAt(LocalDateTime.now());
-        log.info("getting action: {}, from userId: {}", analyticsEventDto.toString(), analyticsEventDto.getReceiverId());
+        log.info("getting action: {}, from userId: {}", analyticsEventDto, analyticsEventDto.getReceiverId());
         analyticsEventRepository.save(analyticsEventMapper.toEntity(analyticsEventDto));
         log.info("success saved action of userId: {}", analyticsEventDto.getReceiverId());
         return ResponseEntity.ok().build();
@@ -41,5 +41,11 @@ public class AnalyticsEventService {
                         HashMap::new,
                         Collectors.summingInt(event -> 1)
                 ));
+    }
+
+    public int getSumOfUsersActionsByEventType(List<Integer> usersActionsSumByEventType) {
+        return usersActionsSumByEventType.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 }
