@@ -99,7 +99,7 @@ public class RedisConfig {
     }
     @Bean(value = "mentorshipRequestedTopic")
     ChannelTopic mentorshipRequestedTopic(
-            @Value("${spring.data.redis.channels.mentorship-requested-channel.name}") String mentorshipRequestedChannelName ) {
+            @Value("${spring.data.redis.channels.mentorship-requested-channel.name}") String mentorshipRequestedChannelName) {
         return new ChannelTopic(mentorshipRequestedChannelName);
     }
 }
