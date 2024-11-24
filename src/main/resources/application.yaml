@@ -1,3 +1,15 @@
+server:
+  port: 8086
+user-service:
+  host: localhost
+  port: 8080
+post-service:
+  host: localhost
+  port: 8081
+project-service:
+  host: localhost
+  port: 8082
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -21,16 +33,15 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channel:
+      channels:
         profile-view: profile_view_channel
-
-server:
-  port: 8086
+        post-comment: post_comment_channel
 
 logging:
   level:
-    root: info
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: ERROR
+    org.hibernate.type: ERROR
 
-project-service:
-  host: localhost
-  port: 8082
+
