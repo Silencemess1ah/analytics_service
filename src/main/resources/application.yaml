@@ -34,8 +34,12 @@ spring:
           name: like_channel
         mentorship-requested-channel:
           name: mentorship_requested_channel
-
-
+        post-view-channel:
+          name: post_view_channel
+        premium-channel:
+          name: premium_channel
+        comment-channel:
+          name: comment_channel
 
 server:
   port: 8086

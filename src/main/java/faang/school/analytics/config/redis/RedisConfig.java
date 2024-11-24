@@ -6,6 +6,9 @@ import faang.school.analytics.listener.MentorshipRequestedEventListener;
 import faang.school.analytics.listener.PostLikeEventListener;
 import faang.school.analytics.listener.ProfileViewEventListener;
 import faang.school.analytics.listener.ProjectViewEventListener;
+import faang.school.analytics.config.redis.eventconfig.EventRedisConfig;
+import faang.school.analytics.config.redis.eventconfig.PremiumBoughtEventRedisConfig;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +22,10 @@ import java.util.Map;
 
 @Setter
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
+
+    private final PremiumBoughtEventRedisConfig premiumConfig;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
