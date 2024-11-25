@@ -2,21 +2,25 @@ package faang.school.analytics.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
-public class PremiumBoughtEvent extends AbstractEventDto{
+@NoArgsConstructor
+public class MentorshipRequestedEventDto extends AbstractEventDto {
+
     @Override
+    @JsonProperty("receiverId")
     public void setReceiverId(Long receiverId) {
-        this.receiverId = 0L;
+        this.receiverId = receiverId;
     }
 
     @Override
-    @JsonProperty("userId")
+    @JsonProperty("requesterId")
     public void setActorId(Long actorId) {
         this.actorId = actorId;
     }
 
     @Override
-    @JsonProperty("timestamp")
+    @JsonProperty("requestedAt")
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }

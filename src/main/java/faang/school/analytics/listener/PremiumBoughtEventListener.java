@@ -1,6 +1,5 @@
 package faang.school.analytics.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.event.PremiumBoughtEvent;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
