@@ -1,6 +1,7 @@
 package faang.school.analytics.mapper;
 
 import faang.school.analytics.dto.CommentEvent;
+import faang.school.analytics.dto.RecommendationEvent;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.model.LikeEvent;
@@ -16,6 +17,12 @@ public interface AnalyticsEventMapper {
     @Mapping(target = "id", source = "postId")
     @Mapping(target = "receivedAt", source = "dateLike")
     AnalyticsEvent toEntity(LikeEvent likeEvent);
+
+    @Mapping(target = "receiverId", source = "receiverId")
+    @Mapping(target = "actorId", source = "requesterId")
+    @Mapping(target = "id", source = "recommendationId")
+    @Mapping(target = "receivedAt", source = "eventTime")
+    AnalyticsEvent toEntity(RecommendationEvent recommendationEvent);
 
     @Mapping(target = "eventType", source = "postId", qualifiedByName = "eventType")
     @Mapping(target = "receiverId", source = "postId")
