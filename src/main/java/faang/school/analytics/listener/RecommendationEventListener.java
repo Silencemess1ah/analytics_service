@@ -3,8 +3,6 @@ package faang.school.analytics.listener;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.RecommendationEvent;
-import faang.school.analytics.event.ProjectViewEvent;
-import faang.school.analytics.service.AnalyticService;
 import faang.school.analytics.service.AnalyticsEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
