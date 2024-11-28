@@ -25,6 +25,7 @@ spring:
         like-event: like_event_channel
         profile-view: profile_view_channel
         project-profile-attendance: appa_channel
+        recommendation-event-channel: recommendation_event_channel
       topics:
         comment_event_topic: commentEventQueue
 
