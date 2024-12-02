@@ -18,11 +18,6 @@ public interface AnalyticsEventRepository extends JpaRepository<AnalyticsEvent, 
 
     Stream<AnalyticsEvent> findByReceiverIdAndEventType(long receiverId, EventType eventType);
 
-//    @Query("""
-//            SELECT a.actorId, SUM(a.actorId) FROM AnalyticsEvent a
-//            WHERE a.eventType = :eventType AND a.receivedAt >= :timeLimit
-//            GROUP BY a.actorId
-//            """)
     @Query(nativeQuery = true, value = """
         SELECT * 
         FROM analytics_event a WHERE
