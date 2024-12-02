@@ -1,5 +1,7 @@
 package faang.school.analytics.dto;
 
+import faang.school.analytics.model.EventType;
+import faang.school.analytics.model.Interval;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ public class AnalyticsEventFilterDto {
     private Long receiverId;
 
     @NotNull
-    private Integer eventType;
+    private EventType eventType;
 
     @Nullable
     private LocalDateTime from;
@@ -27,6 +29,6 @@ public class AnalyticsEventFilterDto {
     private LocalDateTime to;
 
     @Nullable
-    private Integer dayInterval;
+    private Interval interval;
 
 }

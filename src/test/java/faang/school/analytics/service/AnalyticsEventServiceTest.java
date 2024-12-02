@@ -64,7 +64,7 @@ class AnalyticsEventServiceTest {
 
         AnalyticsEventFilterDto filter = AnalyticsEventFilterDto.builder()
                 .receiverId(1L)
-                .eventType(1)
+                .eventType(EventType.FOLLOWER)
                 .build();
 
         List<AnalyticsEventDto> res = analyticsEventService.getAnalytics(filter);

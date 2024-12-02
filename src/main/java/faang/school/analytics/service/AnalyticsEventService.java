@@ -4,7 +4,6 @@ import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsEventFilterDto;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
-import faang.school.analytics.model.EventType;
 import faang.school.analytics.repository.AnalyticsEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +28,9 @@ public class AnalyticsEventService {
 
     @Transactional(readOnly = true)
     public List<AnalyticsEventDto> getAnalytics(AnalyticsEventFilterDto filter) {
-        EventType type = EventType.of(filter.getEventType());
-        Stream<AnalyticsEvent> events = analyticsEventRepository.findByReceiverIdAndEventType(filter.getReceiverId(), type);
+        Stream<AnalyticsEvent> events = analyticsEventRepository.findByReceiverIdAndEventType(filter.getReceiverId(), filter.getEventType());
 
-        events = filter.getDayInterval() != null ? filterByInterval(events, filter.getDayInterval()) :
+        events = filter.getInterval() != null ? filterByInterval(events, filter.getInterval().getDays()) :
                 filterByDates(events, filter.getFrom(), filter.getTo());
 
         return events

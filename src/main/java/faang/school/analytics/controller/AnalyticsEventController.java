@@ -3,6 +3,8 @@ package faang.school.analytics.controller;
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsEventFilterDto;
 import faang.school.analytics.exception.DataValidationException;
+import faang.school.analytics.model.EventType;
+import faang.school.analytics.model.Interval;
 import faang.school.analytics.service.AnalyticsEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,15 +43,16 @@ public class AnalyticsEventController {
             @RequestParam Integer eventType,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
-            @RequestParam(required = false) Integer dayInterval
+            @RequestParam(required = false) Integer interval
     ) {
-        if (dayInterval != null && (from != null || to != null)) {
-            log.warn("Incorrect filter for get events: interval = {}, fromAt = {}, toAt = {}", dayInterval, from, to);
+        if (interval != null && (from != null || to != null)) {
+            log.warn("Incorrect filter for get events: interval = {}, fromAt = {}, toAt = {}", interval, from, to);
             throw new DataValidationException("Search filter required 'Interval' or 'Dates'");
         }
-        AnalyticsEventFilterDto filter = new AnalyticsEventFilterDto(receiverId, eventType, from, to, dayInterval);
+        Interval intervalValue = interval != null ? Interval.of(interval) : null;
+        AnalyticsEventFilterDto filter = new AnalyticsEventFilterDto(receiverId, EventType.of(eventType), from, to, intervalValue);
         log.info("Requested events with filter: interval = {}, fromAt = {}, toAt = {}",
-                filter.getDayInterval(), filter.getFrom(), filter.getTo());
+                filter.getInterval(), filter.getFrom(), filter.getTo());
         return analyticsEventService.getAnalytics(filter);
     }
 }
