@@ -1,4 +1,4 @@
-package faang.school.analytics.config;
+package faang.school.analytics.filter;
 import java.time.LocalDateTime;
 
 public interface Interval {
