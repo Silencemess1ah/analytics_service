@@ -2,6 +2,7 @@ package faang.school.analytics.controller;
 
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsFilterDto;
+import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.service.AnalyticsEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +18,7 @@ public class AnalyticController {
     public final AnalyticsEventService analyticsEventService;
 
     @PostMapping("/save")
-    public void save(@Validated @RequestBody AnalyticsEventDto event) {
+    public void save(@RequestBody AnalyticsEvent event) {
         analyticsEventService.saveEvent(event);
     }
 

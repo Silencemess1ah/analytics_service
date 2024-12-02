@@ -3,6 +3,7 @@ package faang.school.analytics.service;
 import faang.school.analytics.dto.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsFilterDto;
 import faang.school.analytics.filter.AnalyticsFilterI;
+import faang.school.analytics.filter.Interval;
 import faang.school.analytics.mappers.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.repository.AnalyticsEventRepository;
@@ -22,20 +23,26 @@ public class AnalyticsEventService {
     private final AnalyticsEventMapper analyticsEventMapper;
     private final List<AnalyticsFilterI> analyticsFilters;
 
-    public void saveEvent(AnalyticsEventDto event) {
-        AnalyticsEvent analyticsEvent = analyticsEventMapper.toEntity(event);
-        analyticsEventRepository.save(analyticsEvent);
+    public void saveEvent(AnalyticsEvent event) {
+        analyticsEventRepository.save(event);
     }
 
     public List<AnalyticsEventDto> getAnalytics(AnalyticsFilterDto analyticsFilterDto) {
-        try (Stream<AnalyticsEvent> eventsStream = analyticsEventRepository.findByReceiverIdAndEventType(analyticsFilterDto.getReceiverId(),
-                analyticsFilterDto.getEventType())) {
+        Stream<AnalyticsEvent> eventsStream = analyticsEventRepository.findByReceiverIdAndEventType(
+                analyticsFilterDto.getReceiverId(), analyticsFilterDto.getEventType());
 
+        try (eventsStream) {
             Stream<AnalyticsEvent> filteredStream = eventsStream;
+
             for (AnalyticsFilterI filter : analyticsFilters) {
                 if (filter.isApplicable(analyticsFilterDto)) {
                     filteredStream = filter.apply(filteredStream, analyticsFilterDto);
                 }
+            }
+
+            Interval interval = analyticsFilterDto.getInterval();
+            if (interval != null) {
+                filteredStream = filteredStream.filter(event -> interval.contains(event.getReceivedAt()));
             }
 
             return filteredStream
