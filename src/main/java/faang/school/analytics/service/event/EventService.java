@@ -11,6 +11,7 @@ import faang.school.analytics.validator.analytic_event.AnalyticEventServiceValid
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -56,7 +57,7 @@ public class EventService {
         log.info("mapping entity to dto");
         return eventMapper.toDto(analyticsEvent);
     }
-
+    @Transactional(readOnly = true)
     public List<EventDto> getEventsDto(EventRequestDto eventRequestDto) {
         log.info("validate eventRequestDto");
         analyticEventServiceValidator.checkRequestDto(eventRequestDto);
@@ -85,7 +86,7 @@ public class EventService {
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
     }
-
+    @Transactional(readOnly = true)
     public List<AnalyticsEvent> getEventsEntity(EventRequestDto eventRequestDto) {
         log.info("validate eventRequestDto");
         analyticEventServiceValidator.checkRequestDto(eventRequestDto);
