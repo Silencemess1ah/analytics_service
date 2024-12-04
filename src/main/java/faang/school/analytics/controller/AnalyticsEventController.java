@@ -27,7 +27,7 @@ import java.util.List;
 public class AnalyticsEventController {
     private final AnalyticsEventService analyticsEventService;
 
-    @GetMapping("/receiverId/{receiverId}/eventType/{eventType}")
+    @GetMapping("/receiverId/{receiverId}/event-type/{eventType}")
     public ResponseEntity<List<AnalyticsEventResponseDto>> getAnalytics(
             @PathVariable(name = "receiverId")
             @NotNull(message = "ReceiverId is required.")

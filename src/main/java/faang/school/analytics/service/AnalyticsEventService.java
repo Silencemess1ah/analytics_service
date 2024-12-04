@@ -10,12 +10,12 @@ import faang.school.analytics.repository.AnalyticsEventRepository;
 import faang.school.analytics.specification.AnalyticsEventSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -34,7 +34,9 @@ public class AnalyticsEventService {
     public List<AnalyticsEventResponseDto> getAnalytics(
             Long receiverId, EventType eventType, Interval interval, LocalDateTime from, LocalDateTime to) {
 
-        Specification<AnalyticsEvent> specification = Specification.where(AnalyticsEventSpecification.hasReceiverId(receiverId))
+        Sort sort = Sort.by(Sort.Direction.DESC, "receivedAt");
+        Specification<AnalyticsEvent> specification = Specification.where(
+                        AnalyticsEventSpecification.hasReceiverId(receiverId))
                 .and(AnalyticsEventSpecification.hasEventType(eventType));
 
         if (interval != null) {
@@ -46,8 +48,7 @@ public class AnalyticsEventService {
             specification = specification.and(AnalyticsEventSpecification.withinPeriod(from, to));
         }
 
-        List<AnalyticsEventResponseDto> result = analyticsEventRepository.findAll(specification).stream()
-                .sorted(Comparator.comparing(AnalyticsEvent::getReceivedAt))
+        List<AnalyticsEventResponseDto> result = analyticsEventRepository.findAll(specification, sort).stream()
                 .map(analyticsEventMapper::entityToResponseDto)
                 .toList();
         log.info("Analytics retrieved successfully for receiverId {}. {} events found.", receiverId, result.size());

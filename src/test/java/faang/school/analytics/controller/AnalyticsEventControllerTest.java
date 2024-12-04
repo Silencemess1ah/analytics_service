@@ -68,7 +68,7 @@ class AnalyticsEventControllerTest {
         when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to))
                 .thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/eventType/{eventType}", receiverId, eventType)
+        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/event-type/{eventType}", receiverId, eventType)
                         .param("interval", interval != null ? interval.toString() : null)
                         .param("from", from.toString())
                         .param("to", to.toString())
@@ -86,7 +86,7 @@ class AnalyticsEventControllerTest {
         when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to))
                 .thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/eventType/{eventType}", receiverId, eventType)
+        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/event-type/{eventType}", receiverId, eventType)
                         .param("interval", interval != null ? interval.toString() : null)
                         .param("from", from.toString())
                         .param("to", to.toString())

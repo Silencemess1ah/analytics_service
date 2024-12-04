@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -82,8 +83,9 @@ class AnalyticsEventServiceTest {
 
     @Test
     void testGetAnalyticsWithInterval() {
-        when(analyticsEventRepository.findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any()))
-                .thenReturn(List.of(analyticsEvent));
+        when(analyticsEventRepository.findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class))).thenReturn(List.of(analyticsEvent));
         when(analyticsEventMapper.entityToResponseDto(analyticsEvent)).thenReturn(responseDto);
 
         List<AnalyticsEventResponseDto> result = analyticsEventService.getAnalytics(
@@ -91,7 +93,9 @@ class AnalyticsEventServiceTest {
 
         assertThat(result).containsExactly(responseDto);
         verify(analyticsEventValidator, never()).validateDateOrder(from, to);
-        verify(analyticsEventRepository, times(1)).findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any());
+        verify(analyticsEventRepository, times(1)).findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class));
         verify(analyticsEventMapper, times(1)).entityToResponseDto(analyticsEvent);
     }
 
@@ -99,7 +103,9 @@ class AnalyticsEventServiceTest {
     void testGetAnalyticsWithFromAndTo() {
         interval = null;
 
-        when(analyticsEventRepository.findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any()))
+        when(analyticsEventRepository.findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class)))
                 .thenReturn(List.of(analyticsEvent));
         when(analyticsEventMapper.entityToResponseDto(analyticsEvent)).thenReturn(responseDto);
 
@@ -114,7 +120,9 @@ class AnalyticsEventServiceTest {
         interval = null;
         to = null;
 
-        when(analyticsEventRepository.findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any()))
+        when(analyticsEventRepository.findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class)))
                 .thenReturn(List.of(analyticsEvent));
         when(analyticsEventMapper.entityToResponseDto(analyticsEvent)).thenReturn(responseDto);
 
@@ -129,7 +137,9 @@ class AnalyticsEventServiceTest {
         interval = null;
         from = null;
 
-        when(analyticsEventRepository.findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any()))
+        when(analyticsEventRepository.findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class)))
                 .thenReturn(List.of(analyticsEvent));
         when(analyticsEventMapper.entityToResponseDto(analyticsEvent)).thenReturn(responseDto);
 
@@ -145,8 +155,9 @@ class AnalyticsEventServiceTest {
         from = null;
         to = null;
 
-        when(analyticsEventRepository.findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any()))
-                .thenReturn(List.of(analyticsEvent));
+        when(analyticsEventRepository.findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class))).thenReturn(List.of(analyticsEvent));
         when(analyticsEventMapper.entityToResponseDto(analyticsEvent)).thenReturn(responseDto);
 
         List<AnalyticsEventResponseDto> result = analyticsEventService.getAnalytics(
@@ -158,7 +169,9 @@ class AnalyticsEventServiceTest {
     private void assertWhenIntervalIsNull(List<AnalyticsEventResponseDto> result) {
         assertThat(result).containsExactly(responseDto);
         verify(analyticsEventValidator, times(1)).validateDateOrder(from, to);
-        verify(analyticsEventRepository, times(1)).findAll(ArgumentMatchers.<Specification<AnalyticsEvent>>any());
+        verify(analyticsEventRepository, times(1)).findAll(
+                ArgumentMatchers.<Specification<AnalyticsEvent>>any(),
+                ArgumentMatchers.any(Sort.class));
         verify(analyticsEventMapper, times(1)).entityToResponseDto(analyticsEvent);
     }
 }

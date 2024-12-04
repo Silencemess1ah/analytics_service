@@ -2,6 +2,7 @@ package faang.school.analytics.specification;
 
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
@@ -20,14 +21,17 @@ public class AnalyticsEventSpecification {
 
     public static Specification<AnalyticsEvent> withinPeriod(LocalDateTime start, LocalDateTime end) {
         return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
             if (start != null && end != null) {
-                return criteriaBuilder.between(root.get("receivedAt"), start, end);
+                predicate = criteriaBuilder.between(root.get("receivedAt"), start, end);
             } else if (start != null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("receivedAt"), start);
+                predicate = criteriaBuilder.greaterThanOrEqualTo(root.get("receivedAt"), start);
             } else if (end != null) {
-                return criteriaBuilder.lessThanOrEqualTo(root.get("receivedAt"), end);
+                predicate = criteriaBuilder.lessThanOrEqualTo(root.get("receivedAt"), end);
             }
-            return null;
+
+            return predicate;
         };
     }
 }
