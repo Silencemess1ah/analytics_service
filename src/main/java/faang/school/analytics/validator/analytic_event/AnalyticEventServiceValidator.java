@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class AnalyticEventServiceValidator {
     public void checkEntity(AnalyticsEvent analyticsEvent) {
         if (analyticsEvent.getEventType() == null || analyticsEvent.getActorId() < 0 || analyticsEvent.getReceiverId() < 0) {
-            throw new IllegalArgumentException("Не валидные данные ");
+            throw new IllegalArgumentException("Не валидный eventType или actorId или ReceiverId ");
         }
     }
 

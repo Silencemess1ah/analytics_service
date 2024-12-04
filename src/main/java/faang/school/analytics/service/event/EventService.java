@@ -1,6 +1,7 @@
 package faang.school.analytics.service.event;
 
 import faang.school.analytics.dto.event.EventDto;
+import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.mapper.event.EventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
@@ -28,33 +29,33 @@ public class EventService {
     private final AnalyticEventServiceValidator analyticEventServiceValidator;
 
     public EventDto addNewEvent(EventDto eventDto) {
-        log.info("mapping dto to entity");
+        log.info("mapping eventDto to AnalyticEvent");
         AnalyticsEvent analyticsEvent = eventMapper.toEntity(eventDto);
 
         if (analyticsEvent.getReceivedAt() == null) {
-            log.info("set ReceivedAt now");
+            log.info("set ReceivedAt now to AnalyticEvent");
             analyticsEvent.setReceivedAt(LocalDateTime.now());
         }
-        log.info("save entity in db");
+        log.info("save AnalyticEvent in db");
         analyticsEventRepository.save(analyticsEvent);
 
-        log.info("mapping entity to dto");
+        log.info("mapping  AnalyticEvent to eventDto");
         return eventMapper.toDto(analyticsEvent);
     }
 
     public EventDto addNewEvent(AnalyticsEvent analyticsEvent) {
-        log.info("validate analyticEvent");
+        log.info("validate analyticEvent argument");
         analyticEventServiceValidator.checkEntity(analyticsEvent);
 
         if (analyticsEvent.getReceivedAt() == null) {
-            log.info("set ReceivedAt now");
+            log.info("set ReceivedAt now to AnalyticEvent");
             analyticsEvent.setReceivedAt(LocalDateTime.now());
         }
 
-        log.info("save entity in db");
+        log.info("save AnalyticEvent in db");
         analyticsEventRepository.save(analyticsEvent);
 
-        log.info("mapping entity to dto");
+        log.info("mapping AnalyticEvent to eventDto");
         return eventMapper.toDto(analyticsEvent);
     }
 
@@ -91,7 +92,6 @@ public class EventService {
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
     }
-
     @Transactional(readOnly = true)
     public List<AnalyticsEvent> getEventsEntity(long receiverId,
                                                 String eventTypeStr,

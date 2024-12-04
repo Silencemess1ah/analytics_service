@@ -3,7 +3,7 @@ package faang.school.analytics.validator.analytic_event;
 import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
-import faang.school.analytics.model.Interval;
+import faang.school.analytics.dto.event.Interval;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
