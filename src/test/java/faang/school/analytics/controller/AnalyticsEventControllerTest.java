@@ -65,11 +65,11 @@ class AnalyticsEventControllerTest {
 
     @Test
     void testGetAnalyticsSuccess() throws Exception {
-        when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to)).thenReturn(List.of(responseDto));
+        when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to))
+                .thenReturn(List.of(responseDto));
 
-        mockMvc.perform(get("/analytics-events")
-                        .param("receiverId", String.valueOf(receiverId))
-                        .param("eventType", eventType.name())
+        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/eventType/{eventType}", receiverId, eventType)
+                        .param("interval", interval != null ? interval.toString() : null)
                         .param("from", from.toString())
                         .param("to", to.toString())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -83,11 +83,11 @@ class AnalyticsEventControllerTest {
 
     @Test
     void testGetAnalyticsNoResults() throws Exception {
-        when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to)).thenReturn(Collections.emptyList());
+        when(analyticsEventService.getAnalytics(receiverId, eventType, interval, from, to))
+                .thenReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/analytics-events")
-                        .param("receiverId", String.valueOf(receiverId))
-                        .param("eventType", eventType.name())
+        mockMvc.perform(get("/analytics-events/receiverId/{receiverId}/eventType/{eventType}", receiverId, eventType)
+                        .param("interval", interval != null ? interval.toString() : null)
                         .param("from", from.toString())
                         .param("to", to.toString())
                         .contentType(MediaType.APPLICATION_JSON))

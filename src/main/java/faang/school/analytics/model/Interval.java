@@ -24,14 +24,7 @@ public enum Interval {
     public LocalDateTime calculateIntervalStart() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
 
-        if (interval instanceof Duration) {
-            return now.minus(interval);
-        } else if (interval instanceof Period) {
-            return now.minus(interval);
-        }
-
-        throw new IllegalArgumentException(
-                String.format("Unsupported duration type: %s, value: %s", interval.getClass().getName(), interval));
+        return now.minus(interval);
     }
 }
 
