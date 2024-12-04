@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,7 +31,6 @@ public class AnalyticsEventService {
         log.info("Analytics event {} saved successfully.", savedEvent.getId());
     }
 
-    @Transactional(readOnly = true)
     public List<AnalyticsEventResponseDto> getAnalytics(
             Long receiverId, EventType eventType, Interval interval, LocalDateTime from, LocalDateTime to) {
 
