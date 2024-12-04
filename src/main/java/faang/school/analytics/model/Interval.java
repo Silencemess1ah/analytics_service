@@ -3,19 +3,20 @@ package faang.school.analytics.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum Interval {
-    INTERVAL_1D(1),
-    INTERVAL_3D(3),
-    INTERVAL_7D(7),
-    INTERVAL_14D(14),
-    INTERVAL_30D(30),
-    INTERVAL_90D(90),
-    INTERVAL_180D(180),
-    INTERVAL_365D(365)
-    ;
+    DAY_1(1),
+    DAY_3(3),
+    DAY_14(14),
+    DAY_30(30),
+    DAY_90(90),
+    MONTH_1(30),
+    MONTH_3(90),
+    MONTH_6(180),
+    MONTH_12(365),
+    YEAR_1(365);
 
-    @Getter
     private final int days;
 
     public static Interval of(int intervalOrder) {
