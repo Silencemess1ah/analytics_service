@@ -10,9 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.event.EventDto;
-import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.model.EventType;
-import faang.school.analytics.model.Interval;
+import faang.school.analytics.service.event.EventParamService;
 import faang.school.analytics.service.event.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +35,9 @@ class EventControllerTest {
     @Mock
     private EventService eventService;
 
+    @Mock
+    private EventParamService eventParamService;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
@@ -56,7 +58,7 @@ class EventControllerTest {
 
         when(eventService.addNewEvent(eventDto)).thenReturn(eventDto);
 
-        mockMvc.perform(post("/api/v1/add")
+        mockMvc.perform(post("/api/v1/events")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventDto)))
                 .andExpect(status().isOk())
@@ -79,9 +81,9 @@ class EventControllerTest {
             array.add(event);
         });
 
-        when(eventService.getEventsDto(1, "FOLLOWER", "DAY", null, null)).thenReturn(array);
+        when(eventParamService.getEventsDto(1, "FOLLOWER", "DAY", null, null)).thenReturn(array);
 
-        mockMvc.perform(get("/api/v1/get")
+        mockMvc.perform(get("/api/v1/events/get")
                         .param("receiverId", "1")
                         .param("eventType", "FOLLOWER")
                         .param("interval", "DAY"))

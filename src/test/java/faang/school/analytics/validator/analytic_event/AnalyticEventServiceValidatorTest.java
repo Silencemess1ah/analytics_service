@@ -42,7 +42,7 @@ class AnalyticEventServiceValidatorTest {
 
     @Test
     void testCorrectInterval() {
-        assertDoesNotThrow(() -> analyticEventServiceValidator.validateInterval(null, "Time", "Time"));
+        assertDoesNotThrow(() -> analyticEventServiceValidator.validateInterval(Interval.WEEK, null, null));
     }
 
     @Test
@@ -53,6 +53,6 @@ class AnalyticEventServiceValidatorTest {
 
     @Test
     void testCorrectCheckIdAndEvent() {
-        assertDoesNotThrow(() -> analyticEventServiceValidator.checkIdAndEvent(1, "EVENT"));
+        assertDoesNotThrow(() -> analyticEventServiceValidator.checkIdAndEvent(1, EventType.FOLLOWER));
     }
 }
