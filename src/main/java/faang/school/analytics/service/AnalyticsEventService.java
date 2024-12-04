@@ -7,6 +7,7 @@ import faang.school.analytics.filter.Interval;
 import faang.school.analytics.mappers.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.repository.AnalyticsEventRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,14 @@ public class AnalyticsEventService {
     private final AnalyticsEventMapper analyticsEventMapper;
     private final List<AnalyticsFilterI> analyticsFilters;
 
-    public void saveEvent(AnalyticsEvent event) {
-        analyticsEventRepository.save(event);
+    public void saveEvent(AnalyticsEventDto event) {
+        AnalyticsEvent analyticsEvent = analyticsEventMapper.toEntity(event);
+        analyticsEventRepository.save(analyticsEvent);
     }
 
+    @Transactional
     public List<AnalyticsEventDto> getAnalytics(AnalyticsFilterDto analyticsFilterDto) {
+
         Stream<AnalyticsEvent> eventsStream = analyticsEventRepository.findByReceiverIdAndEventType(
                 analyticsFilterDto.getReceiverId(), analyticsFilterDto.getEventType());
 
