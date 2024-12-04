@@ -45,3 +45,7 @@ rating:
   half-max-rank: 50.0
   max-user-rating: 100.0
   min-user-rating: 0.0
+
+redis:
+  topic:
+    premium-bought: premium-bought
