@@ -6,9 +6,11 @@ import faang.school.analytics.service.event.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,8 +26,15 @@ public class EventController {
         return eventService.addNewEvent(eventDto);
     }
 
-    @PostMapping("/get")
-    public List<EventDto> getEvents(@Valid @RequestBody EventRequestDto eventRequestDto) {
-        return eventService.getEventsDto(eventRequestDto);
+    @GetMapping("/get")
+    public List<EventDto> getEvents(
+            @RequestParam long receiverId,
+            @RequestParam String eventType,
+            @RequestParam(required = false) String interval,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to) {
+        return eventService.getEventsDto(receiverId, eventType, interval, from, to);
     }
+
+
 }

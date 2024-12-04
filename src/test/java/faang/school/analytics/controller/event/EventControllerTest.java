@@ -3,6 +3,7 @@ package faang.school.analytics.controller.event;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,7 +56,7 @@ class EventControllerTest {
 
         when(eventService.addNewEvent(eventDto)).thenReturn(eventDto);
 
-        mockMvc.perform(post("/add")
+        mockMvc.perform(post("/api/v1/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventDto)))
                 .andExpect(status().isOk())
@@ -78,15 +79,12 @@ class EventControllerTest {
             array.add(event);
         });
 
-        EventRequestDto eventRequestDto = new EventRequestDto();
-        eventRequestDto.setEventType(EventType.FOLLOWER);
-        eventRequestDto.setInterval(Interval.DAY);
+        when(eventService.getEventsDto(1, "FOLLOWER", "DAY", null, null)).thenReturn(array);
 
-        when(eventService.getEventsDto(eventRequestDto)).thenReturn(array);
-
-        mockMvc.perform(post("/get")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(eventRequestDto)))
+        mockMvc.perform(get("/api/v1/get")
+                        .param("receiverId", "1")
+                        .param("eventType", "FOLLOWER")
+                        .param("interval", "DAY"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].eventType", is("FOLLOWER")))

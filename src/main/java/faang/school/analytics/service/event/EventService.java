@@ -1,7 +1,6 @@
 package faang.school.analytics.service.event;
 
 import faang.school.analytics.dto.event.EventDto;
-import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.mapper.event.EventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,45 +57,56 @@ public class EventService {
         log.info("mapping entity to dto");
         return eventMapper.toDto(analyticsEvent);
     }
+
     @Transactional(readOnly = true)
-    public List<EventDto> getEventsDto(EventRequestDto eventRequestDto) {
-        log.info("validate eventRequestDto");
-        analyticEventServiceValidator.checkRequestDto(eventRequestDto);
+    public List<EventDto> getEventsDto(long receiverId,
+                                       String eventTypeStr,
+                                       String intervalStr,
+                                       String fromStr,
+                                       String toStr) {
+        log.info("validate requestParam");
+        analyticEventServiceValidator.validateInterval(intervalStr, fromStr, toStr);
+        analyticEventServiceValidator.checkIdAndEvent(receiverId, eventTypeStr);
 
-        long receiverId = eventRequestDto.getReceiverId();
-        EventType eventType = eventRequestDto.getEventType();
-        Interval interval = eventRequestDto.getInterval();
-        LocalDateTime from = eventRequestDto.getFrom();
-        LocalDateTime to = eventRequestDto.getTo();
-
-        log.info("getting stream of event from db");
-        Stream<AnalyticsEvent> events = analyticsEventRepository.findByReceiverIdAndEventType(receiverId, eventType);
+        EventType eventType = getEventType(eventTypeStr);
+        LocalDateTime from = getLocalDateTime(fromStr);
+        LocalDateTime to = getLocalDateTime(toStr);
+        Interval interval = getInterval(intervalStr);
 
         if (interval != null) {
-            log.info("changing localDateTime from and to as interval");
+            log.info("changing localDateTime fromStr and toStr as intervalStr");
             from = getTime(interval);
             to = LocalDateTime.now();
         }
 
+        log.info("getting stream of event fromStr db");
+        Stream<AnalyticsEvent> events = analyticsEventRepository.findByReceiverIdAndEventType(receiverId, eventType);
+
         LocalDateTime finalFrom = from;
         LocalDateTime finalTo = to;
-        log.info("apply filters and sort by received time and then mapping to dto");
+        log.info("apply filters and sort by received time and then mapping toStr dto");
         return events.filter(analyticsEvent -> analyticsEvent.getReceivedAt().isAfter(finalFrom))
                 .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isBefore(finalTo))
                 .sorted(Comparator.comparing(AnalyticsEvent::getReceivedAt))
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
     }
-    @Transactional(readOnly = true)
-    public List<AnalyticsEvent> getEventsEntity(EventRequestDto eventRequestDto) {
-        log.info("validate eventRequestDto");
-        analyticEventServiceValidator.checkRequestDto(eventRequestDto);
 
-        long receiverId = eventRequestDto.getReceiverId();
-        EventType eventType = eventRequestDto.getEventType();
-        Interval interval = eventRequestDto.getInterval();
-        LocalDateTime from = eventRequestDto.getFrom();
-        LocalDateTime to = eventRequestDto.getTo();
+    @Transactional(readOnly = true)
+    public List<AnalyticsEvent> getEventsEntity(long receiverId,
+                                                String eventTypeStr,
+                                                String intervalStr,
+                                                String fromStr,
+                                                String toStr) {
+        log.info("validate eventRequestDto");
+        analyticEventServiceValidator.validateInterval(intervalStr, fromStr, toStr);
+        analyticEventServiceValidator.checkIdAndEvent(receiverId, eventTypeStr);
+
+        EventType eventType = getEventType(eventTypeStr);
+        LocalDateTime from = getLocalDateTime(fromStr);
+        LocalDateTime to = getLocalDateTime(toStr);
+        Interval interval = getInterval(intervalStr);
+
 
         log.info("getting stream of event from db");
         Stream<AnalyticsEvent> events = analyticsEventRepository.findByReceiverIdAndEventType(receiverId, eventType);
@@ -114,6 +125,47 @@ public class EventService {
                 .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isBefore(finalTo))
                 .sorted(Comparator.comparing(AnalyticsEvent::getReceivedAt))
                 .collect(Collectors.toList());
+    }
+
+    private EventType getEventType(String event) {
+        try {
+            int id = Integer.parseInt(event);
+            return EventType.of(id);
+        } catch (NumberFormatException e) {
+            try {
+                return EventType.valueOf(event.toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Такого эвента не существует");
+            }
+        }
+    }
+
+    private Interval getInterval(String interval) {
+        if (interval == null || interval.isBlank()) {
+            return null;
+        }
+        try {
+            int id = Integer.parseInt(interval);
+            return Interval.values()[id];
+        } catch (NumberFormatException e) {
+            try {
+                return Interval.valueOf(interval.toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException("Такого интервала не существует");
+            }
+        }
+    }
+
+    private LocalDateTime getLocalDateTime(String time) {
+        if (time == null || time.isBlank()) {
+            return null;
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            return LocalDateTime.parse(time, formatter);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Не правильно введенное время");
+        }
     }
 
     private LocalDateTime getTime(Interval interval) {

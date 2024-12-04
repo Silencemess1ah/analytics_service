@@ -1,6 +1,5 @@
 package faang.school.analytics.validator.analytic_event;
 
-import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.model.AnalyticsEvent;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +11,15 @@ public class AnalyticEventServiceValidator {
         }
     }
 
-    public void checkRequestDto(EventRequestDto eventRequestDto) {
-        if (eventRequestDto.getInterval() == null && (eventRequestDto.getTo() == null || eventRequestDto.getFrom() == null)) {
+    public void validateInterval(String interval, String from, String to) {
+        if ((interval == null || interval.isBlank()) && ((from == null || from.isBlank()) || (to == null || from.isBlank()))) {
             throw new IllegalArgumentException("Интервал и временной промежуток не может быть равен нулю");
+        }
+    }
+
+    public void checkIdAndEvent(long id, String event) {
+        if (id < 0 || event == null || event.isBlank()) {
+            throw new IllegalArgumentException("не валидный id или эвент");
         }
     }
 }
