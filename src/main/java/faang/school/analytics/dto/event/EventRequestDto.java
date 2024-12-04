@@ -1,7 +1,6 @@
 package faang.school.analytics.dto.event;
 
 import faang.school.analytics.model.EventType;
-import faang.school.analytics.model.Interval;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.event.EventDto;
 import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.model.EventType;
-import faang.school.analytics.model.Interval;
+import faang.school.analytics.dto.event.Interval;
 import faang.school.analytics.service.event.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ class EventControllerTest {
 
         when(eventService.addNewEvent(eventDto)).thenReturn(eventDto);
 
-        mockMvc.perform(post("/add")
+        mockMvc.perform(post("/api/v1/event")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventDto)))
                 .andExpect(status().isOk())
@@ -84,7 +84,7 @@ class EventControllerTest {
 
         when(eventService.getEventsDto(eventRequestDto)).thenReturn(array);
 
-        mockMvc.perform(post("/get")
+        mockMvc.perform(post("/api/v1/event/get")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventRequestDto)))
                 .andExpect(status().isOk())

@@ -5,7 +5,7 @@ import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.mapper.event.EventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
 import faang.school.analytics.model.EventType;
-import faang.school.analytics.model.Interval;
+import faang.school.analytics.dto.event.Interval;
 import faang.school.analytics.repository.AnalyticsEventRepository;
 import faang.school.analytics.validator.analytic_event.AnalyticEventServiceValidator;
 import lombok.RequiredArgsConstructor;
@@ -28,38 +28,38 @@ public class EventService {
     private final AnalyticEventServiceValidator analyticEventServiceValidator;
 
     public EventDto addNewEvent(EventDto eventDto) {
-        log.info("mapping dto to entity");
+        log.info("mapping eventDto to AnalyticEvent");
         AnalyticsEvent analyticsEvent = eventMapper.toEntity(eventDto);
 
         if (analyticsEvent.getReceivedAt() == null) {
-            log.info("set ReceivedAt now");
+            log.info("set ReceivedAt now to AnalyticEvent");
             analyticsEvent.setReceivedAt(LocalDateTime.now());
         }
-        log.info("save entity in db");
+        log.info("save AnalyticEvent in db");
         analyticsEventRepository.save(analyticsEvent);
 
-        log.info("mapping entity to dto");
+        log.info("mapping  AnalyticEvent to eventDto");
         return eventMapper.toDto(analyticsEvent);
     }
 
     public EventDto addNewEvent(AnalyticsEvent analyticsEvent) {
-        log.info("validate analyticEvent");
+        log.info("validate analyticEvent argument");
         analyticEventServiceValidator.checkEntity(analyticsEvent);
 
         if (analyticsEvent.getReceivedAt() == null) {
-            log.info("set ReceivedAt now");
+            log.info("set ReceivedAt now to AnalyticEvent");
             analyticsEvent.setReceivedAt(LocalDateTime.now());
         }
 
-        log.info("save entity in db");
+        log.info("save AnalyticEvent in db");
         analyticsEventRepository.save(analyticsEvent);
 
-        log.info("mapping entity to dto");
+        log.info("mapping AnalyticEvent to eventDto");
         return eventMapper.toDto(analyticsEvent);
     }
     @Transactional(readOnly = true)
     public List<EventDto> getEventsDto(EventRequestDto eventRequestDto) {
-        log.info("validate eventRequestDto");
+        log.info("validate eventRequestDto argument");
         analyticEventServiceValidator.checkRequestDto(eventRequestDto);
 
         long receiverId = eventRequestDto.getReceiverId();
@@ -88,7 +88,7 @@ public class EventService {
     }
     @Transactional(readOnly = true)
     public List<AnalyticsEvent> getEventsEntity(EventRequestDto eventRequestDto) {
-        log.info("validate eventRequestDto");
+        log.info("validate eventRequestDto argument");
         analyticEventServiceValidator.checkRequestDto(eventRequestDto);
 
         long receiverId = eventRequestDto.getReceiverId();
@@ -110,7 +110,8 @@ public class EventService {
         LocalDateTime finalTo = to;
 
         log.info("apply filters and sort by received time");
-        return events.filter(analyticsEvent -> analyticsEvent.getReceivedAt().isAfter(finalFrom))
+        return events
+                .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isAfter(finalFrom))
                 .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isBefore(finalTo))
                 .sorted(Comparator.comparing(AnalyticsEvent::getReceivedAt))
                 .collect(Collectors.toList());
