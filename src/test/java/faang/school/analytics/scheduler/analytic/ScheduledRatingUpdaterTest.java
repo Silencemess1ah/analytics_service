@@ -1,6 +1,7 @@
 package faang.school.analytics.scheduler.analytic;
 
 import faang.school.analytics.client.user.UserServiceClient;
+import faang.school.analytics.config.context.UserContext;
 import faang.school.analytics.dto.user.UpdateUsersRankDto;
 import faang.school.analytics.mapper.user.UpdateUsersRankMapper;
 import faang.school.analytics.model.AnalyticsEvent;
@@ -54,6 +55,9 @@ class ScheduledRatingUpdaterTest {
 
     @Mock
     private AnalyticsEventService analyticsEventService;
+
+    @Mock
+    private UserContext userContext;
 
     @InjectMocks
     private ScheduledRatingUpdater scheduledRatingUpdater;

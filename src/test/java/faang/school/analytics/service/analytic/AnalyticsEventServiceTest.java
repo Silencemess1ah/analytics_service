@@ -1,6 +1,7 @@
 package faang.school.analytics.service.analytic;
 
 import faang.school.analytics.client.user.UserServiceClient;
+import faang.school.analytics.config.context.UserContext;
 import faang.school.analytics.dto.analytic.AnalyticsEventDto;
 import faang.school.analytics.dto.user.UserDto;
 import faang.school.analytics.mapper.AnalyticsEventMapperImpl;
@@ -41,6 +42,9 @@ public class AnalyticsEventServiceTest {
 
     @Mock
     private UserServiceClient userServiceClient;
+
+    @Mock
+    private UserContext userContext;
 
     private AnalyticsEventDto analyticsEventDto;
     private final AnalyticsEventDto analyticsEventDtoWithWrongEventTypeNumber =
