@@ -22,17 +22,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.never;
+
 import faang.school.analytics.dto.MentorshipRequestEvent;
-import faang.school.analytics.mapper.AnalyticsEventMapper;
-import faang.school.analytics.model.AnalyticsEvent;
-import faang.school.analytics.repository.AnalyticsEventRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -66,7 +58,7 @@ class AnalyticsEventServiceTest {
     private LocalDateTime from;
     private LocalDateTime to;
     private MentorshipRequestEvent mentorshipRequestEvent;
-    private AnalyticsEvent analyticsEventmentorshipRequest;
+    private AnalyticsEvent analyticsEventMentorshipRequest;
 
     @BeforeEach
     void setUp() {
@@ -90,7 +82,7 @@ class AnalyticsEventServiceTest {
                 .build();
 
         mentorshipRequestEvent = new MentorshipRequestEvent(1L, 2L, null);
-        analyticsEventmentorshipRequest = new AnalyticsEvent();
+        analyticsEventMentorshipRequest = new AnalyticsEvent();
     }
 
     @Test
@@ -199,20 +191,20 @@ class AnalyticsEventServiceTest {
     @Test
     void saveMentorshipRequestEventSuccessfully() {
         when(analyticsEventMapper.toAnalyticsEventMentorshipRequest(mentorshipRequestEvent))
-                .thenReturn(analyticsEventmentorshipRequest);
+                .thenReturn(analyticsEventMentorshipRequest);
 
         analyticsEventService.saveMentorshipRequestEvent(mentorshipRequestEvent);
 
         verify(analyticsEventMapper, times(1)).toAnalyticsEventMentorshipRequest(mentorshipRequestEvent);
-        verify(analyticsEventRepository, times(1)).save(analyticsEventmentorshipRequest);
+        verify(analyticsEventRepository, times(1)).save(analyticsEventMentorshipRequest);
     }
 
 
     @Test
     void saveMentorshipRequestEvent_ShouldThrowExceptionWhenRepositoryFails() {
         when(analyticsEventMapper.toAnalyticsEventMentorshipRequest(mentorshipRequestEvent))
-                .thenReturn(analyticsEventmentorshipRequest);
-        doThrow(new RuntimeException("Database error")).when(analyticsEventRepository).save(analyticsEventmentorshipRequest);
+                .thenReturn(analyticsEventMentorshipRequest);
+        doThrow(new RuntimeException("Database error")).when(analyticsEventRepository).save(analyticsEventMentorshipRequest);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             analyticsEventService.saveMentorshipRequestEvent(mentorshipRequestEvent);
