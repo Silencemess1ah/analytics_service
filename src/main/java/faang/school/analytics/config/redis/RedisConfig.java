@@ -1,6 +1,8 @@
 package faang.school.analytics.config.redis;
 
-import faang.school.analytics.messaging.PremiumBoughtListener;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.analytics.messaging.premium.PremiumBoughtListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +16,15 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
+    private final ObjectMapper objectMapper;
     @Value("${spring.data.redis.host}")
     private String host;
     @Value("${spring.data.redis.port}")
     private int port;
+    @Value("${redis.topic.premium-bought}")
+    private String premiumBoughtTopic;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
@@ -45,11 +51,11 @@ public class RedisConfig {
 
     @Bean
     ChannelTopic premiumBoughtTopic() {
-        return new ChannelTopic("premium-bought");
+        return new ChannelTopic(premiumBoughtTopic);
     }
 
     @Bean
-    MessageListenerAdapter premiumBoughtListener() {
-        return new MessageListenerAdapter(new PremiumBoughtListener());
+    MessageListenerAdapter premiumBoughtListener(PremiumBoughtListener premiumBoughtListener) {
+        return new MessageListenerAdapter(premiumBoughtListener);
     }
 }
