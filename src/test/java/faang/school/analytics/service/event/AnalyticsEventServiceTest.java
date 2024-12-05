@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EventServiceTest {
+class AnalyticsEventServiceTest {
     @InjectMocks
-    private EventService eventService;
+    private AnalyticsEventService analyticsEventService;
     @Mock
     private AnalyticsEventRepository analyticsEventRepository;
     @Spy
@@ -65,7 +65,7 @@ class EventServiceTest {
     void testAddNewEventWithNullReceivedAt() {
         when(eventMapper.toEntity(eventDto)).thenReturn(analyticsEvent);
 
-        eventService.addNewEvent(eventDto);
+        analyticsEventService.addNewEvent(eventDto);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -77,7 +77,7 @@ class EventServiceTest {
         analyticsEvent.setReceivedAt(LocalDateTime.now().minusDays(1));
         when(eventMapper.toEntity(eventDto)).thenReturn(analyticsEvent);
 
-        EventDto result = eventService.addNewEvent(eventDto);
+        EventDto result = analyticsEventService.addNewEvent(eventDto);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -88,12 +88,12 @@ class EventServiceTest {
     void testAddNewEventWithInvalidAnalyticEvent() {
         doThrow(new IllegalArgumentException()).when(analyticEventServiceValidator).checkEntity(analyticsEvent);
         assertThrows(IllegalArgumentException.class,
-                () -> eventService.addNewEvent(analyticsEvent));
+                () -> analyticsEventService.addNewEvent(analyticsEvent));
     }
 
     @Test
     void testAddNewEventWithNullReceivedAtWithEvent() {
-        eventService.addNewEvent(analyticsEvent);
+        analyticsEventService.addNewEvent(analyticsEvent);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -104,7 +104,7 @@ class EventServiceTest {
     void testAddNewEventWithReceivedAtWithEvent() {
         analyticsEvent.setReceivedAt(LocalDateTime.now().minusDays(1));
 
-        EventDto result = eventService.addNewEvent(analyticsEvent);
+        EventDto result = analyticsEventService.addNewEvent(analyticsEvent);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -116,7 +116,7 @@ class EventServiceTest {
         doThrow(new IllegalArgumentException())
                 .when(analyticEventServiceValidator).checkRequestDto(any(EventRequestDto.class));
         assertThrows(IllegalArgumentException.class,
-                () -> eventService.getEventsDto(new EventRequestDto()));
+                () -> analyticsEventService.getEventsDto(new EventRequestDto()));
     }
 
     @Test
@@ -124,7 +124,7 @@ class EventServiceTest {
         doThrow(new IllegalArgumentException())
                 .when(analyticEventServiceValidator).checkRequestDto(any(EventRequestDto.class));
         assertThrows(IllegalArgumentException.class,
-                () -> eventService.getEventsEntity(new EventRequestDto()));
+                () -> analyticsEventService.getEventsEntity(new EventRequestDto()));
     }
 
     @Test
@@ -136,7 +136,7 @@ class EventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<EventDto> result = eventService.getEventsDto(eventRequestDto);
+        List<EventDto> result = analyticsEventService.getEventsDto(eventRequestDto);
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());
@@ -155,7 +155,7 @@ class EventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<EventDto> result = eventService.getEventsDto(eventRequestDto);
+        List<EventDto> result = analyticsEventService.getEventsDto(eventRequestDto);
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());
@@ -171,7 +171,7 @@ class EventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<AnalyticsEvent> result = eventService.getEventsEntity(eventRequestDto);
+        List<AnalyticsEvent> result = analyticsEventService.getEventsEntity(eventRequestDto);
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());
@@ -190,7 +190,7 @@ class EventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<AnalyticsEvent> result = eventService.getEventsEntity(eventRequestDto);
+        List<AnalyticsEvent> result = analyticsEventService.getEventsEntity(eventRequestDto);
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());

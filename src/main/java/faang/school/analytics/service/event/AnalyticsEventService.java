@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EventService {
+public class AnalyticsEventService {
     private final AnalyticsEventRepository analyticsEventRepository;
     private final EventMapper eventMapper;
     private final AnalyticEventServiceValidator analyticEventServiceValidator;
@@ -57,6 +57,7 @@ public class EventService {
         log.info("mapping AnalyticEvent to eventDto");
         return eventMapper.toDto(analyticsEvent);
     }
+
     @Transactional(readOnly = true)
     public List<EventDto> getEventsDto(EventRequestDto eventRequestDto) {
         log.info("validate eventRequestDto argument");
@@ -80,12 +81,14 @@ public class EventService {
         LocalDateTime finalFrom = from;
         LocalDateTime finalTo = to;
         log.info("apply filters and sort by received time and then mapping to dto");
-        return events.filter(analyticsEvent -> analyticsEvent.getReceivedAt().isAfter(finalFrom))
+        return events
+                .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isAfter(finalFrom))
                 .filter(analyticsEvent -> analyticsEvent.getReceivedAt().isBefore(finalTo))
                 .sorted(Comparator.comparing(AnalyticsEvent::getReceivedAt))
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
     }
+
     @Transactional(readOnly = true)
     public List<AnalyticsEvent> getEventsEntity(EventRequestDto eventRequestDto) {
         log.info("validate eventRequestDto argument");

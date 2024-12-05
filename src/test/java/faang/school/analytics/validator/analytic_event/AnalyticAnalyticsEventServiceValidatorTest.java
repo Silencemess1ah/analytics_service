@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AnalyticEventServiceValidatorTest {
+class AnalyticAnalyticsEventServiceValidatorTest {
     private AnalyticEventServiceValidator analyticEventServiceValidator;
     private AnalyticsEvent analyticsEvent;
     private EventRequestDto eventRequestDto;

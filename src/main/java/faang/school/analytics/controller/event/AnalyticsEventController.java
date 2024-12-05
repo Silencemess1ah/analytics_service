@@ -2,7 +2,7 @@ package faang.school.analytics.controller.event;
 
 import faang.school.analytics.dto.event.EventDto;
 import faang.school.analytics.dto.event.EventRequestDto;
-import faang.school.analytics.service.event.EventService;
+import faang.school.analytics.service.event.AnalyticsEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -18,16 +18,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/event")
 @Validated
-public class EventController {
-    private final EventService eventService;
+public class AnalyticsEventController {
+    private final AnalyticsEventService analyticsEventService;
 
     @PostMapping()
     public EventDto addNewEvent(@Valid @RequestBody EventDto eventDto) {
-        return eventService.addNewEvent(eventDto);
+        return analyticsEventService.addNewEvent(eventDto);
     }
 
     @PostMapping("/get")
     public List<EventDto> getEvents(@Valid @RequestBody EventRequestDto eventRequestDto) {
-        return eventService.getEventsDto(eventRequestDto);
+        return analyticsEventService.getEventsDto(eventRequestDto);
     }
 }

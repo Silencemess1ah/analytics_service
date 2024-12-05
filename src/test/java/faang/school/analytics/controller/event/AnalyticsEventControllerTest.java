@@ -12,7 +12,7 @@ import faang.school.analytics.dto.event.EventDto;
 import faang.school.analytics.dto.event.EventRequestDto;
 import faang.school.analytics.model.EventType;
 import faang.school.analytics.dto.event.Interval;
-import faang.school.analytics.service.event.EventService;
+import faang.school.analytics.service.event.AnalyticsEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,18 +29,18 @@ import java.util.stream.Stream;
 
 
 @ExtendWith(MockitoExtension.class)
-class EventControllerTest {
+class AnalyticsEventControllerTest {
     @InjectMocks
-    private EventController eventController;
+    private AnalyticsEventController analyticsEventController;
     @Mock
-    private EventService eventService;
+    private AnalyticsEventService analyticsEventService;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(analyticsEventController).build();
         objectMapper = new ObjectMapper();
     }
 
@@ -53,7 +53,7 @@ class EventControllerTest {
         eventDto.setReceiverId(2);
 
 
-        when(eventService.addNewEvent(eventDto)).thenReturn(eventDto);
+        when(analyticsEventService.addNewEvent(eventDto)).thenReturn(eventDto);
 
         mockMvc.perform(post("/api/v1/event")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +82,7 @@ class EventControllerTest {
         eventRequestDto.setEventType(EventType.FOLLOWER);
         eventRequestDto.setInterval(Interval.DAY);
 
-        when(eventService.getEventsDto(eventRequestDto)).thenReturn(array);
+        when(analyticsEventService.getEventsDto(eventRequestDto)).thenReturn(array);
 
         mockMvc.perform(post("/api/v1/event/get")
                         .contentType(MediaType.APPLICATION_JSON)
