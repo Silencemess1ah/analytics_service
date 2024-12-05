@@ -118,7 +118,7 @@ class AnalyticsEventServiceTest {
         doThrow(new IllegalArgumentException())
                 .when(analyticEventServiceValidator).validateInterval(null, null, null);
         assertThrows(IllegalArgumentException.class,
-                () -> eventService.getEventsEntity(1, null, null, null, null));
+                () -> analyticsEventService.getEventsEntity(1, null, null, null, null));
     }
 
 //    @Test
@@ -161,7 +161,7 @@ class AnalyticsEventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<AnalyticsEvent> result = eventService.getEventsEntity(1, EventType.FOLLOWER, Interval.WEEK, null, null);
+        List<AnalyticsEvent> result = analyticsEventService.getEventsEntity(1, EventType.FOLLOWER, Interval.WEEK, null, null);
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());
@@ -177,7 +177,7 @@ class AnalyticsEventServiceTest {
 
         when(analyticsEventRepository.findByReceiverIdAndEventType(1, EventType.FOLLOWER)).thenReturn(events);
 
-        List<AnalyticsEvent> result = eventService.getEventsEntity(1, EventType.FOLLOWER, null, LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
+        List<AnalyticsEvent> result = analyticsEventService.getEventsEntity(1, EventType.FOLLOWER, null, LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
 
         assertFalse(result.isEmpty());
         assertEquals(result.get(0).getActorId(), secondAnalyticEvent.getActorId());

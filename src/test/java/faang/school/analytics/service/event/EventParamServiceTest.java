@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class EventParamServiceTest {
 
     @Mock
-    private EventService eventService;
+    private AnalyticsEventService eventService;
 
     @Mock
     private EventMapper eventMapper;

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventParamService {
-    private final EventService eventService;
+    private final AnalyticsEventService eventService;
     private final EventMapper eventMapper;
 
     public List<EventDto> getEventsDto(long receiverId,
