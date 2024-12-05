@@ -37,6 +37,11 @@ public class AnalyticsEventService {
         return ResponseEntity.ok().build();
     }
 
+    public void saveAction(AnalyticsEvent analyticsEvent) {
+        analyticsEventRepository.save(analyticsEvent);
+        log.info("saved analytics event {}", analyticsEvent);
+    }
+
     public Map<Long, Integer> mapAnalyticEventsToActorActionsCount(List<AnalyticsEvent> analyticsEvents) {
         return analyticsEvents.stream()
                 .collect(Collectors.groupingBy(

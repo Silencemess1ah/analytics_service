@@ -19,6 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
     private final ObjectMapper objectMapper;
+    private final PremiumBoughtListener premiumBoughtListener;
     @Value("${spring.data.redis.host}")
     private String host;
     @Value("${spring.data.redis.port}")
@@ -45,7 +46,7 @@ public class RedisConfig {
     RedisMessageListenerContainer redisContainer() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(premiumBoughtListener(), premiumBoughtTopic());
+        container.addMessageListener(premiumBoughtListenerAdapter(), premiumBoughtTopic());
         return container;
     }
 
@@ -55,7 +56,7 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter premiumBoughtListener(PremiumBoughtListener premiumBoughtListener) {
+    MessageListenerAdapter premiumBoughtListenerAdapter() {
         return new MessageListenerAdapter(premiumBoughtListener);
     }
 }
