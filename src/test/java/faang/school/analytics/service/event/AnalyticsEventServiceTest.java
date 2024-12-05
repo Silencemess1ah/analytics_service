@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class EventServiceTest {
+class AnalyticsEventServiceTest {
     @InjectMocks
-    private EventService eventService;
+    private AnalyticsEventService analyticsEventService;
     @Mock
     private AnalyticsEventRepository analyticsEventRepository;
     @Spy
@@ -59,7 +59,7 @@ class EventServiceTest {
     void testAddNewEventWithNullReceivedAt() {
         when(eventMapper.toEntity(eventDto)).thenReturn(analyticsEvent);
 
-        eventService.addNewEvent(eventDto);
+        analyticsEventService.addNewEvent(eventDto);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -71,7 +71,7 @@ class EventServiceTest {
         analyticsEvent.setReceivedAt(LocalDateTime.now().minusDays(1));
         when(eventMapper.toEntity(eventDto)).thenReturn(analyticsEvent);
 
-        EventDto result = eventService.addNewEvent(eventDto);
+        EventDto result = analyticsEventService.addNewEvent(eventDto);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -82,12 +82,12 @@ class EventServiceTest {
     void testAddNewEventWithInvalidAnalyticEvent() {
         doThrow(new IllegalArgumentException()).when(analyticEventServiceValidator).checkEntity(analyticsEvent);
         assertThrows(IllegalArgumentException.class,
-                () -> eventService.addNewEvent(analyticsEvent));
+                () -> analyticsEventService.addNewEvent(analyticsEvent));
     }
 
     @Test
     void testAddNewEventWithNullReceivedAtWithEvent() {
-        eventService.addNewEvent(analyticsEvent);
+        analyticsEventService.addNewEvent(analyticsEvent);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -98,7 +98,7 @@ class EventServiceTest {
     void testAddNewEventWithReceivedAtWithEvent() {
         analyticsEvent.setReceivedAt(LocalDateTime.now().minusDays(1));
 
-        EventDto result = eventService.addNewEvent(analyticsEvent);
+        EventDto result = analyticsEventService.addNewEvent(analyticsEvent);
 
         verify(analyticsEventRepository, times(1)).save(analyticsEvent);
         verify(eventMapper, times(1)).toDto(analyticsEvent);
@@ -154,7 +154,7 @@ class EventServiceTest {
 
     @Test
     void testGetEventEntityWithInterval() {
-        ;
+
         analyticsEvent.setReceivedAt(LocalDateTime.now().minusYears(1));
 
         Stream<AnalyticsEvent> events = Stream.of(analyticsEvent, secondAnalyticEvent);

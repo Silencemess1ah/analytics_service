@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ import java.util.stream.Stream;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EventService {
+public class AnalyticsEventService {
     private final AnalyticsEventRepository analyticsEventRepository;
     private final EventMapper eventMapper;
     private final AnalyticEventServiceValidator analyticEventServiceValidator;

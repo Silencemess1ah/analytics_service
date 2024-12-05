@@ -11,8 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.analytics.dto.event.EventDto;
 import faang.school.analytics.model.EventType;
+import faang.school.analytics.dto.event.Interval;
+import faang.school.analytics.service.event.AnalyticsEventService;
 import faang.school.analytics.service.event.EventParamService;
-import faang.school.analytics.service.event.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,11 +30,11 @@ import java.util.stream.Stream;
 
 
 @ExtendWith(MockitoExtension.class)
-class EventControllerTest {
+class AnalyticsEventControllerTest {
     @InjectMocks
-    private EventController eventController;
+    private AnalyticsEventController analyticsEventController;
     @Mock
-    private EventService eventService;
+    private AnalyticsEventService analyticsEventService;
 
     @Mock
     private EventParamService eventParamService;
@@ -43,7 +44,7 @@ class EventControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(eventController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(analyticsEventController).build();
         objectMapper = new ObjectMapper();
     }
 
@@ -56,7 +57,7 @@ class EventControllerTest {
         eventDto.setReceiverId(2);
 
 
-        when(eventService.addNewEvent(eventDto)).thenReturn(eventDto);
+        when(analyticsEventService.addNewEvent(eventDto)).thenReturn(eventDto);
 
         mockMvc.perform(post("/api/v1/events")
                         .contentType(MediaType.APPLICATION_JSON)
