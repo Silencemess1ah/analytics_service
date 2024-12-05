@@ -1,9 +1,9 @@
 package faang.school.analytics.controller;
 
-import faang.school.analytics.dto.AnalyticsEventDto;
+import faang.school.analytics.dto.analytic.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsEventFilterDto;
 import faang.school.analytics.exception.DataValidationException;
-import faang.school.analytics.service.AnalyticsEventService;
+import faang.school.analytics.service.analytic.AnalyticsEventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

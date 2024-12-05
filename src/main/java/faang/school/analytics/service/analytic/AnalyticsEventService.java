@@ -1,10 +1,10 @@
-package faang.school.analytics.service;
+package faang.school.analytics.service.analytic;
 
-import faang.school.analytics.dto.AnalyticsEventDto;
+import faang.school.analytics.dto.analytic.AnalyticsEventDto;
 import faang.school.analytics.dto.AnalyticsEventFilterDto;
 import faang.school.analytics.mapper.AnalyticsEventMapper;
 import faang.school.analytics.model.AnalyticsEvent;
-import faang.school.analytics.repository.AnalyticsEventRepository;
+import faang.school.analytics.repository.analytic.AnalyticsEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
