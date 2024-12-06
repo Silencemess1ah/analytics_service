@@ -33,15 +33,13 @@ spring:
     redis:
       port: 6379
       host: localhost
-      channels:
-        profile-view: profile_view_channel
-        post-comment: post_comment_channel
+      channel:
+        profileView: profile_view_channel
+        projectViewChannel: project_view_channel
+        likeEvents: like_post_channel
+        mentorshipRequestTopic: mentorship_request_topic
+        postViewEvent: post_view_channel
 
 logging:
   level:
-    root: INFO
-    org.springframework.web: INFO
-    org.hibernate.SQL: ERROR
-    org.hibernate.type: ERROR
-
-
+    root: info

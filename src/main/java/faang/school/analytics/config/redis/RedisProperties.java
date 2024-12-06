@@ -1,15 +1,25 @@
 package faang.school.analytics.config.redis;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
-@Data
+@Getter
+@Setter
+@Component
 @ConfigurationProperties(prefix = "spring.data.redis")
 public class RedisProperties {
 
-    private int port;
-    private String host;
-    private Map<String, String> channels;
+    private Channel channel;
+
+    @Getter
+    @Setter
+    protected static class Channel {
+        private String profileView;
+        private String projectViewChannel;
+        private String likeEvents;
+        private String mentorshipRequestTopic;
+        private String postViewEvent;
+    }
 }

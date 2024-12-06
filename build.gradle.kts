@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
+    id("checkstyle")
 }
 
 group = "faang.school"
@@ -43,6 +44,15 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 
     /**
+     * OpenAPI & swagger dependencies
+     *   http://localhost:8086/swagger-ui/index.html - swagger ui
+     *   http://localhost:8086/v3/api-docs - docs in JSON format
+     */
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.15")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+    /**
      * Test containers
      */
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.6"))
@@ -56,6 +66,18 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+checkstyle {
+    toolVersion = "10.20.0"
+    configFile = file("${rootDir}/src/main/resources/checkstyle/checkstyle.xml")
+}
+
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 tasks.withType<Test> {
