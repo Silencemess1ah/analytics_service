@@ -3,10 +3,10 @@ name: Dependency submission for analytics service
 on:
   push:
     branches:
-      - unicorn-master-stream6
+      - dev
   pull_request:
     branches:
-      - unicorn-master-stream6
+      - dev
 
 permissions:
   contents: write
